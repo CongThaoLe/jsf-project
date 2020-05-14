@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form id="dlgAddAcc">
+		<ui:param name="controller" value="#{trangChuController}"></ui:param>
+		<p:dialog style="background-color: #e0ebff"
+			styleClass="background-dialogBest" closable="true" modal="true"
+			closeOnEscape="true" visible="true" showEffect="fade" height="400"
+			width="1200" widgetVar="bestSale">
+			<p:carousel circular="true" itemStyle="text-align:center"
+				id="custom" responsive="true"
+				value="#{controller.listBestSale}" var="item" autoPlayInterval="3000"
+				autoplayDuration="3000" effectDuration="1000">
+				<f:facet name="header">
+					<p:outputPanel style="color:red">
+						<h:outputText value="........~*~-. SÁCH ĐANG ĐƯỢC MUA NHIỀU NHẤT .~*~-........"/>
+					</p:outputPanel>
+				</f:facet>
+				<p:panel styleClass="card"
+						header="#{danhmucUtils.loadTenDM(item.catId)}"
+						style="text-align:center;background-color: #68b5ba;width:auto">
+						<div class="form-group">
+							<div class="col-sm-12 col-md-12">
+								<img width="115px" height="150px"
+									src="data:image/png;base64, #{item.getImage() == null ? null :  controller.getProductImage(item.getImage())}">
+								</img>
+							</div>
+						</div>
+
+						<div class="EmptyBox10" />
+
+						<div class="form-group">
+							<div class="col-sm-12 col-md-12" style="height: 60px">
+								<p:outputLabel value="#{item.name}" />
+							</div>
+						</div>
+						<div class="EmptyBox5" />
+
+						<div class="form-group">
+							<div class="col-sm-12 col-md-12">
+								<p:outputLabel value="Giá : #{item.price} VNĐ">
+									<f:convertNumber locale="vi_VN" />
+								</p:outputLabel>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-12 col-md-12">
+								<p:commandButton value="Xem chi tiết"
+									onclick="PF('bestSale').hide()"
+									oncomplete="PF('product').close();PF('detail').show()"
+									actionListener="#{gioHangController.viewDetail(item)}"
+									update="form:detail">
+								</p:commandButton>
+							</div>
+						</div>
+					</p:panel>
+			</p:carousel>
+		</p:dialog>
+	</h:form>
+
+	<style>
+.background-dialogBest {
+	background-image: url("/jsf-project/resources/img/bgdialog.jpg")
+		!important;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+</style>
+	<style>
+.image-ring .ui-ring-item {
+	border: 0 none;
+}
+
+.image-ring .ui-ring-item img {
+	width: 100%;
+}
+
+.ui-ring button {
+	font-size: 1em !important;
+}
+
+.value {
+	font-weight: bold;
+}
+</style>
+</ui:composition>

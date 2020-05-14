@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+	<title>Đăng nhập - BookShop</title>
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<h:outputStylesheet library="primefaces-omg"
+		name="css/bootstrap.min.css" />
+	<h:outputStylesheet library="primefaces-omg" name="css/layout.css" />
+	<link rel="shortcut icon" href="resources/img/hq_icon.ico" />
+</h:head>
+
+<h:body styleClass="login-body" cz-shortcut-listen="true">
+	<div id="login-wrapper">
+		<p:focus context="frmLogin" />
+		<div class="" id="login-container">
+			<h1 class="title">HỆ THỐNG QUẢN LÝ MINH - BOOKSTORE</h1>
+			<h1 class="title">ĐĂNG NHẬP</h1>
+			<div class="EmptyBox10" />
+
+			<h:form id="frmLogin" styleClass="form-horizontal">
+				<p:outputPanel id="panelLogin">
+					<div class="form-group">
+						<p:outputLabel styleClass="col-md-3 control-label" for="username"
+							value="Username:"></p:outputLabel>
+						<div class="col-md-8">
+							<p:inputText styleClass="form-control" id="username"
+								value="#{loginBean.username}" required="true" maxlength="20">
+								<f:validateLength minimum="5" for="username" />
+							</p:inputText>
+						</div>
+					</div>
+					<div class="form-group">
+						<p:outputLabel styleClass="col-md-3 control-label" for="password"
+							value="Password:"></p:outputLabel>
+						<div class="col-md-8">
+							<p:inputText styleClass="form-control" id="password"
+								type="password" value="#{loginBean.password}" required="true"
+								maxlength="20">
+								<f:validateLength minimum="2" />
+							</p:inputText>
+						</div>
+					</div>
+					<div class="EmptyBox20" />
+					<div class="form-group">
+						<p:commandButton type="submit"
+							actionListener="#{loginBean.doLogin}"
+							value="Đăng nhập"
+							update="frmLogin:panelLogin" onstart="PF('loadDialog').show()"
+							oncomplete="PF('loadDialog').hide();" />
+					</div>
+					<p:messages id="usernameMess" for="username" autoUpdate="true"
+						style="color:red" />
+					<p:messages id="passwordMess" for="password" autoUpdate="true"
+						style="color:red" />
+					<p:messages id="messages" showDetail="true" closable="true"
+						autoUpdate="true" />
+				</p:outputPanel>
+			</h:form>
+		</div>
+
+		<div class="login-footer">Hệ thống quản lý BookStore</div>
+
+	</div>
+
+	<p:dialog widgetVar="loadDialog" modal="true" draggable="false"
+		closable="false" resizable="false" showHeader="false" width="70"
+		height="70">
+		<p:graphicImage value="#{loginBean.imgLoading}" width="70" height="70" />
+	</p:dialog>
+</h:body>
+</html>

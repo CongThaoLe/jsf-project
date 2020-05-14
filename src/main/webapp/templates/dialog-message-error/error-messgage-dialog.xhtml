@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<h:form id="formDialogError">
+		<!-- <p:dialog
+			widgetVar="dialogError" id="dialogError" minWidth="400"
+			minHeight="400" styleClass="main-dialog-error" closeOnEscape="true"
+			closable="true" modal="true"
+			header="Lỗi thao tác" style="max-width: 30%">
+			<p:outputPanel id="dlgContent" >
+				<p style="white-space: pre-wrap;word-wrap: break-word;max-height: 100px;overflow: auto;"><h:outputText rendered="#{empty logMessage.response.messages}" value="Lỗi #{logMessage.response.message.code} - #{logMessage.response.message.message}"></h:outputText></p>
+				<p:outputPanel rendered="#{not empty logMessage.response.messages}">
+						<ul>
+					<ui:repeat var="m" value="#{logMessage.response.messages}">
+						<li><h:outputText value="#{m.message}"></h:outputText></li>
+					</ui:repeat>
+					</ul>
+				</p:outputPanel>
+
+				<p:outputPanel
+					rendered="#{not empty logMessage.response.message.stackTrace}">
+					<a id="show-message" data-toggle="collapse"
+						data-target="#trace-message" style="cursor: pointer"> <strong>Hiện
+							chi tiết lỗi</strong>
+					</a>
+					<i class="btn-copy fa fa-clipboard" style="float: right"
+						title="Sao chép lỗi"></i>
+
+					<div id="trace-message" class="collapse alert alert-danger"
+						style="overflow-x: auto; height: 32px;max-height: 300px;">
+						#{not empty logMessage.response.message ? logMessage.response.message.stackTrace : ''}</div>
+					<input id="copy-error"
+						value="#{logMessage.response.message.stackTrace}"
+						style="display: none" />
+				</p:outputPanel>
+			</p:outputPanel>
+		</p:dialog> -->
+		<p:growl id="msgs" widgetVar="msgs" showDetail="true" life="6000"
+			autoUpdate="true" />
+	</h:form>
+</ui:composition>

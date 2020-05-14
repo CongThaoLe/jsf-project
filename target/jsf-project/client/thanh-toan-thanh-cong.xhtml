@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="DlgSuccessPay">
+		<p:dialog id="dlgPaySucces"
+			widgetVar="dlgPaySucces" style="text-align:center;background-color: #e0ebff">
+			<p:panel style="text-align:center;">
+				<div class="EmptyBox10" />
+				<p:outputPanel style="text-align:center;font-size:12px">
+					<p:outputLabel value="ĐẶT HÀNG THÀNH CÔNG"
+						style="color:black;font-size:15px;text-align:center" />
+					<div class="EmptyBox30" />
+					<div class="form-group">
+						<div class="col-sm-12 col-md-12 text-bottom pull-bottom">
+							<p:outputLabel style="color:#0b27ff"
+								value="Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-12 col-md-12 text-bottom pull-bottom">
+							<p:outputLabel style="color:#0b27ff"
+								value="Hãy đến trang thông tin cá nhân để theo dõi đơn hàng nhé ^^!" />
+						</div>
+					</div>
+					<div class="EmptyBox20" />
+					<div class="form-group">
+						<div class="col-sm-12 col-md-12 text-bottom pull-bottom">
+							<p:commandLink title="Thông tin Đơn Hàng" immediate="true"
+								actionListener="#{qlThanhToanController.thongtinPage()}">
+								<p:graphicImage
+									value="/resources/primefaces-omg/orders.ico" />
+							</p:commandLink>
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:panel>
+		</p:dialog>
+	</h:form>
+</ui:composition>

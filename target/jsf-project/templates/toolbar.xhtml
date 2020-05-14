@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:form id="frmToolbar">
+	<p:toolbar>
+		<f:facet name="left">
+				<p:commandButton value="#{msg['common.button.label.guiDuyet']}"
+					actionListener="#{pheDuyetController.guiDuyetHSTCCN(1)}">
+					<p:confirm header="#{msg['common.pheduyet.confirmDialog.title']}"
+						message="#{msg['common.pheduyet.confirmDialog.message']}"
+						icon="ui-icon-alert" />
+				</p:commandButton>
+				<p:confirmDialog global="true"  closeOnEscape="true">
+					<p:commandButton value="#{msg['common.confirmDialog.yes']}"
+						styleClass="ui-confirmdialog-yes"/>
+					<p:commandButton value="#{msg['common.confirmDialog.no']}"
+						styleClass="ui-confirmdialog-no" />
+				</p:confirmDialog>
+<!-- 				<p:commandButton value="#{msg['common.button.label.nhapExcel']}"></p:commandButton> -->
+		</f:facet>
+	</p:toolbar>
+</h:form>
+</html>

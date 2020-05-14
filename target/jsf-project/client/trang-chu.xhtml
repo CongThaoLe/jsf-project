@@ -1,0 +1,221 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/templates/master.xhtml">
+
+	<ui:define name="main">
+		<h:form id="form">
+			<ui:param name="controller" value="#{trangChuController}"></ui:param>
+			<p:panel styleClass="card pnlTableResize" widgetVar="product"
+				closable="true" style="width:100% !important">
+				<p:outputPanel styleClass="col-sm-12 col-md-12">
+					<div class="form-group">
+						<div class="col-sm-11 col-md-11">
+							<p:outputLabel value="Tìm kiếm sách : " />
+							<p:inputText style="margin-left: 15px;width:140px"
+								styleClass="top-menu Fleft" value="#{trangChuController.name}"
+								placeholder="Nhập từ khóa...">
+							</p:inputText>
+
+							<p:outputLabel style="margin-left: 15px" value="Sắp xếp theo:" />
+
+							<p:selectOneMenu style="margin-left: 15px;top:9px;width:140px"
+								styleClass="top-menu Fleft"
+								value="#{trangChuController.orderStt}">
+								<f:selectItem itemLabel="Tất cả" itemValue=""></f:selectItem>
+								<f:selectItem itemLabel="Tên từ A - Z" itemValue="1"></f:selectItem>
+								<f:selectItem itemLabel="Tên từ Z - A" itemValue="2"></f:selectItem>
+								<f:selectItem itemLabel="Giá tăng dần" itemValue="3"></f:selectItem>
+								<f:selectItem itemLabel="Giá giảm dần" itemValue="4"></f:selectItem>
+							</p:selectOneMenu>
+
+							<p:outputLabel style="margin-left: 15px" value="Thể loại:" />
+
+							<p:selectOneMenu style="margin-left: 15px;top:9px;width:140px"
+								styleClass="top-menu Fleft" value="#{trangChuController.catId}"
+								filter="true" filterMatchMode="contains">
+								<f:selectItem itemLabel="Tất cả"></f:selectItem>
+								<f:selectItems value="#{danhmucUtils.loadDmCate()}" var="pro"
+									itemLabel="#{pro.name}" itemValue="#{pro.id}">
+								</f:selectItems>
+							</p:selectOneMenu>
+
+							<p:commandButton style="margin-left: 15px"
+								styleClass="top-menu Fleft" update="form:dataGrid"
+								value="Tìm kiếm" icon="ui-icon-search"
+								actionListener="#{controller.onSearchProduct()}">
+							</p:commandButton>
+
+							<p:commandButton style="margin-left: 5px"
+								styleClass="top-menu Fleft" update="form"
+								value="Xóa ĐK tìm kiếm"
+								actionListener="#{controller.resetDialogForm()}"
+								icon="fa fa-refresh">
+							</p:commandButton>
+
+							<p:commandButton
+								style="margin-left: 40px;color:white;background-color:red"
+								styleClass="top-menu Fleft" update="dlgAddAcc"
+								value="TOP MUA NHIỀU" oncomplete="PF('bestSale').show()">
+							</p:commandButton>
+						</div>
+						<div class="col-sm-1 col-md-1 text-right">
+							<p:commandLink update="frmTBLCart:tblCart"
+								oncomplete="PF('CartDialog').show()">
+								<p:graphicImage value="/resources/primefaces-omg/bookcartI.ico" />
+								<p:ajax listener="#{gioHangController.total()}"
+									update="frmTBLCart"></p:ajax>
+							</p:commandLink>
+						</div>
+					</div>
+				</p:outputPanel>
+
+				<p:dataGrid id="dataGrid" var="entity"
+					value="#{controller.listData}" columns="6" rows="18" layout="grid"
+					paginator="true" paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="18,30,42,60">
+
+					<p:panel styleClass="card"
+						header="#{danhmucUtils.loadTenDM(entity.catId)}"
+						style="text-align:center;background-color: #e0ebff;height: 95%;">
+						<div class="form-group">
+							<div class="col-sm-12 col-md-12">
+								<img width="115px" height="150px"
+									src="data:image/png;base64, #{entity.getImage() == null ? null :  controller.getProductImage(entity.getImage())}">
+								</img>
+							</div>
+						</div>
+
+						<div class="EmptyBox10" />
+
+						<div class="form-group">
+							<div class="col-sm-12 col-md-12" style="height: 70px">
+								<p:outputLabel value="#{entity.name}" />
+							</div>
+						</div>
+						<div class="EmptyBox5" />
+
+						<div class="form-group" style="color: blue">
+							<div class="col-sm-2 col-md-2">
+								<p:outputLabel value="Giá:" />
+							</div>
+							<div class="col-sm-10 col-md-10" style="padding-right: 50px">
+								<p:outputLabel value="#{entity.price}"> VNĐ
+									<f:convertNumber locale="vi_VN" />
+								</p:outputLabel>
+							</div>
+						</div>
+
+						<div class="EmptyBox5" />
+
+						<div class="form-group" style="color: red">
+							<div class="col-sm-2 col-md-2">
+								<p:outputLabel rendered="#{entity.priceSale != null}"
+									value="Giảm:" />
+							</div>
+							<div class="col-sm-10 col-md-10"
+								style="height: 5px; padding-right: 58px">
+								<p:outputLabel rendered="#{entity.priceSale != null}"
+									value="#{entity.priceSale}"> VNĐ
+									<f:convertNumber locale="vi_VN" />
+								</p:outputLabel>
+							</div>
+						</div>
+
+						<div class="EmptyBox10" />
+
+						<div class="form-group">
+							<div class="col-sm-12 col-md-12">
+								<p:commandButton value="Xem chi tiết"
+									oncomplete="PF('product').close();PF('detail').show()"
+									update="@([id$=detail])"
+									actionListener="#{gioHangController.viewDetail(entity)}"
+									rendered="#{(entity.number > 0) and (entity.status != 0)}">
+								</p:commandButton>
+								<p:commandButton value="Tạm thời hết hàng"
+									style="color:white;background-color:red" update="form:detail"
+									rendered="#{(entity.number == 0) or (entity.status == 0)}"
+									disabled="true">
+								</p:commandButton>
+							</div>
+						</div>
+					</p:panel>
+				</p:dataGrid>
+			</p:panel>
+
+
+			<p:panel styleClass="card pnlTableResize" header="Chi tiết cuốn sách"
+				style="background-color: #e0ebff" closable="true" widgetVar="detail"
+				id="detail" visible="false">
+				<div class="form-group">
+					<p:commandButton value="Quay lại" onstart="PF('detail').close()"
+						oncomplete="PF('product').show()" update="form"
+						actionListener="#{gioHangController.back()}">
+					</p:commandButton>
+					<p:commandButton rendered="#{gioHangController.cate.number > 0}"
+						value="Thêm Vào Giỏ Sách" icon="fa fa-plus"
+						update="frmTBLCart:tblCart"
+						actionListener="#{gioHangController.insertToCart(gioHangController.cate.id , gioHangController.cate)}">
+					</p:commandButton>
+				</div>
+
+				<div class="EmptyBox40" />
+				<p:outputPanel style="text-align:left"
+					styleClass="col-sm-12 col-md-12">
+					<div class="col-sm-3 col-md-3">
+						<div class="form-group">
+							<img style="width: 100%; height: 100%"
+								src="data:image/png;base64, #{gioHangController.cate.image == null ? null : controller.getProductImage(gioHangController.cate.image)}">
+							</img>
+						</div>
+
+						<p:panelGrid columns="2" style="width:100%;border: beige;">
+							<p:outputLabel style="color: blue" value="Giá :" />
+							<p:outputLabel style="font-size:16px;color: blue"
+								value="#{gioHangController.cate.price} VNĐ">
+								<f:convertNumber locale="vi_VN" />
+							</p:outputLabel>
+
+							<p:outputLabel style="color: red"
+								rendered="#{gioHangController.cate.priceSale != null}"
+								value="Giảm giá :" />
+							<p:outputLabel
+								rendered="#{gioHangController.cate.priceSale != null}"
+								style="font-size:16px;color: red"
+								value="#{gioHangController.cate.priceSale}"> VNĐ
+								<f:convertNumber locale="vi_VN" />
+							</p:outputLabel>
+
+							<p:outputLabel style="color: red"
+								rendered="#{gioHangController.cate.priceSale != null}"
+								value="Giá mới :" />
+							<p:outputLabel style="font-size:16px;color: red"
+								rendered="#{gioHangController.cate.priceSale != null}"
+								value="#{gioHangController.cate.price - gioHangController.cate.priceSale}"> VNĐ
+								<f:convertNumber locale="vi_VN" />
+							</p:outputLabel>
+						</p:panelGrid>
+					</div>
+
+					<div class="col-sm-9 col-md-9">
+						<div class="form-group">
+							<p:outputLabel style="font-size:35px"
+								value="#{gioHangController.cate.name}" />
+						</div>
+
+						<div class="form-group">
+							<p:outputLabel escape="false" style="white-space: pre-wrap"
+								value="#{gioHangController.cate.detail}" />
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:panel>
+		</h:form>
+		<ui:include src="/client/dang-nhap-dialog.xhtml"></ui:include>
+		<ui:include src="/client/dang-ky-dialog.xhtml"></ui:include>
+		<ui:include src="/client/best-sale-dialog.xhtml"></ui:include>
+		<ui:include src="gio-hang.xhtml"></ui:include>
+	</ui:define>
+</ui:composition>

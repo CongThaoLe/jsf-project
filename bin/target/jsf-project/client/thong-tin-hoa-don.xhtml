@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form id="frmHoaDon">
+		<p:panel styleClass="card pnlTableResize" header="THÔNG TIN HÓA ĐƠN"
+			toggleable="true" closable="true" style="background-color: #e0ebff">
+			<div style="text-align: center">
+				<p:commandButton value="Làm mới danh sách" update="frmHoaDon"
+					actionListener="#{qlThongTinKhachHangController.Refresh()}">
+				</p:commandButton>
+			</div>
+			
+			<br/>
+			
+			<p:dataTable style="width:70%;margin-left:200px" id="tblTTDonHang"
+				var="entryHoaDon" value="#{qlThongTinKhachHangController.listOrder}"
+				paginator="true" paginatorPosition="bottom">
+				<f:facet name="header">
+					<p:outputPanel style="text-align:left">
+						<h:outputText  value="Danh sách hóa đơn" />
+					</p:outputPanel>
+				</f:facet>
+				<p:column width="120" style="text-align:left">
+					<p:commandButton value="Xem chi tiết"
+						actionListener="#{qlThongTinKhachHangController.onViewDetail(entryHoaDon)}"
+						oncomplete="PF('dlgCTHoaDon').show()" update="@([id$=frmCHITIET])">
+					</p:commandButton>
+
+					<p:commandButton id="delete" value="Hủy" icon="fa fa-fw fa-remove"
+						rendered="#{entryHoaDon.status == 0 || entryHoaDon.status == 2}"
+						update="@([id$=tblTTDonHang])"
+						actionListener="#{qlThongTinKhachHangController.onDelete(entryHoaDon)}">
+						<p:confirm header="Xác nhận"
+							message="Bạn đã chắc chắn muốn hủy đơn hàng này?"
+							icon="ui-icon-alert">
+						</p:confirm>
+					</p:commandButton>
+					<p:confirmDialog global="true" widgetVar="confirmdlg"
+						showEffect="bounce" hideEffect="fade">
+						<p:commandButton value="Có" styleClass="ui-confirmdialog-yes"
+							icon="ui-icon-check">
+						</p:commandButton>
+
+						<p:commandButton value="Không" styleClass="ui-confirmdialog-no"
+							icon="ui-icon-close" onclick="PF('confirmdlg').hide();"
+							type="button">
+						</p:commandButton>
+					</p:confirmDialog>
+				</p:column>
+				<p:column style="text-align:left" width="130"
+					headerText="Mã hóa đơn">
+					<p:outputLabel value="#{entryHoaDon.orderCode}" />
+				</p:column>
+				<p:column style="text-align:center" width="150"
+					headerText="Ngày đặt hàng">
+					<p:outputLabel value="#{entryHoaDon.orderDate}">
+						<f:convertDateTime pattern="dd/MM/yyyy -  HH:mm" />
+					</p:outputLabel>
+				</p:column>
+				<p:column style="text-align:left" width="200"
+					headerText="Tình trạng">
+					<p:outputLabel style="color:red" value="Đã nhận đơn hàng"
+						rendered="#{entryHoaDon.status == 0}" />
+					<p:outputLabel style="color:blue" value="Đang giao hàng"
+						rendered="#{entryHoaDon.status == 1}" />
+					<p:outputLabel style="color:green" value="Đơn hàng hoàn tất"
+						rendered="#{entryHoaDon.status == 2}" />
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+	<ui:include src="chi-tiet-hoa-don.xhtml"></ui:include>
+</ui:composition>

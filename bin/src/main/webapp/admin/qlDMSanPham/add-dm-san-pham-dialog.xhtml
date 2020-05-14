@@ -1,0 +1,66 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form id="dlgAddAcc">
+		<ui:param name="controller" value="#{qlDMSanPhamController}"></ui:param>
+		<ui:param name="entity" value="#{qlDMSanPhamController.cate}"></ui:param>
+		<p:dialog id="dlgAddAcc" modal="true" closable="true" closeOnEscape="true"
+			header="#{controller.flag == 1 ? 'Thêm danh mục' : 'Cập nhật thông tin danh mục'}"
+			widgetVar="dlgAddAcc" minHeight="300" minWidth="400" height="200"
+			width="600" showEffect="fade" hideEffect="fade">
+			<p:panel id="add">
+				<p:outputPanel id="frmSearch" styleClass="col-sm-13 col-md-13"
+					class="form-horizontal">
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3 control-label"
+							value="Tên danh mục:" for="tenDm"/>
+						<div class="col-sm-9 col-md-9">
+							<p:inputText id="tenDm" required="true" styleClass="form-control"
+								value="#{entity.name}" maxlength="255">
+							</p:inputText>
+						</div>
+					</div>
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Trạng thái : " for="status"/>
+						<div class="col-sm-9 col-md-9">
+							<p:selectOneMenu id="status" required="true" styleClass="form-control"
+								value="#{entity.status}">
+								<f:selectItem></f:selectItem>
+								<f:selectItem itemLabel="Đang hoạt động" itemValue="1"></f:selectItem>
+								<f:selectItem itemLabel="Ngừng hoạt động" itemValue="0"></f:selectItem>
+							</p:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="EmptyBox10" />
+
+					<div class="text-center">
+						<p:commandButton value="Thêm mới" icon="fa fa-plus"
+							actionListener="#{controller.onInsert()}"
+							rendered="#{controller.flag eq 1}"
+							oncomplete="PF('dlgAddAcc').show()"
+							update="frmTBLNhanVien:tblNhanVien">
+						</p:commandButton>
+
+						<p:commandButton id="btnUpdate"
+							value="#{msg['common.button.label.update']}"
+							icon="fa fa-fw fa-edit"
+							actionListener="#{controller.onComfirmUpdate()}"
+							update="frmTBLNhanVien:tblNhanVien"
+							oncomplete="PF('dlgAddAcc').show()"
+							rendered="#{controller.flag eq 2}">
+						</p:commandButton>
+
+						<p:commandButton id="btnClose" type="button"
+							value="#{msg['common.button.label.close']}" icon="ui-icon-cancel"
+							onclick="PF('dlgAddAcc').hide();">
+						</p:commandButton>
+					</div>
+				</p:outputPanel>
+			</p:panel>
+		</p:dialog>
+	</h:form>
+</ui:composition>

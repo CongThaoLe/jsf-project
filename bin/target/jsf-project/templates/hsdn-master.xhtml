@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title><ui:insert name="title"></ui:insert> - Admin</title>
+	<ui:insert name="head"></ui:insert>
+	<style>
+</style>
+	<link rel="shortcut icon" href="/jsf-project/resources/img/book library.ico" />
+</h:head>
+<h:body styleClass="main-body">
+
+	<div class="wrapper has-sidebar has-topbar">
+		<nav class="top-menu clearfix">
+			<ui:include src="./topmenu.xhtml">
+
+			</ui:include>
+		</nav>
+		<aside class="sidebar">
+			<ui:include src="./sidebar.xhtml">
+			</ui:include>
+		</aside>
+
+		<main class="main"> 
+			<ui:insert name="main"></ui:insert> 
+			<ui:include src="/templates/dialog-message-error/error-messgage-dialog.xhtml" />
+			<ui:include src="/templates/warnning-tc-hhl-dialog.xhtml" />
+				<div id="statusDialog" style="display: none">
+					<p:graphicImage value="#{loginBean.imgLoading}" />
+				</div>
+				<div id="redirectDialog" style="display: none">
+					<p:graphicImage value="#{loginBean.imgLoading}" />
+				</div>
+				<p:ajaxStatus onstart="showLoading()" onsuccess="hideLoading()" /> 
+		</main>
+
+		<footer class="footer">
+			<ui:include src="./footer.xhtml"></ui:include>
+		</footer>
+	</div>
+	<h:outputStylesheet library="primefaces-omg" name="css/bootstrap.min.css"></h:outputStylesheet>
+	<h:outputStylesheet library="primefaces-omg" name="css/layout.css"></h:outputStylesheet>
+	<h:outputStylesheet library="primefaces-omg" name="css/nanoscroller.css"></h:outputStylesheet>
+	<h:outputScript library="primefaces-omg" name="js/layout.js"></h:outputScript>
+	<h:outputScript library="primefaces-omg" name="js/bootstrap.min.js"></h:outputScript>
+	<h:outputScript library="primefaces-omg" name="js/jquery.nanoscroller.min.js"></h:outputScript>
+	<h:outputScript library="primefaces-omg" name="js/main.js"></h:outputScript>
+	<ui:insert name="foot"></ui:insert>
+</h:body>
+</html>

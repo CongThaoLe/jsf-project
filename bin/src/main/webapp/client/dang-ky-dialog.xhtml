@@ -1,0 +1,174 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form id="formSignUp">
+		<p:dialog id="dlgSignUp" header="ĐĂNG KÝ THÀNH VIÊN"
+			widgetVar="dlgSignUp" width="800px" height="1400" modal="true"
+			closeOnEscape="true">
+			<p:panel styleClass="card pnlTableResize" header=""
+				style="background-color: #e0ebff">
+				<p:outputPanel>
+
+					<p:outputLabel style="color:blue" value="TÀI KHOẢN" />
+
+					<div class="form-horizontal">
+						<div class="form-group">
+							<p:outputLabel class="col-sm-3 col-md-3 control-label"
+								value="Tên đăng nhập :" for="username" />
+
+							<div class="col-sm-6 col-md-6">
+								<p:inputText styleClass="form-control" id="username"
+									value="#{qlLoginSignUpController.userName}" maxlength="20"
+									required="true">
+									<p:ajax event="change" update="warning"
+										process="@this username" partialSubmit="true"
+										skipChildren="false"
+										listener="#{qlLoginSignUpController.CheckExistedUsername()}" />
+								</p:inputText>
+
+							</div>
+							<div class="col-sm-3 col-md-3">
+								<p:outputLabel
+									style="#{qlLoginSignUpController.flag == 1 ? 'color:red' : 'color:green'}"
+									id="warning"
+									value="#{qlLoginSignUpController.CheckExistedUsername()}">
+								</p:outputLabel>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<p:outputLabel class="col-sm-3 col-md-3 control-label"
+								value="Mật khẩu:" for="pass" />
+							<div class="col-sm-9 col-md-9">
+								<p:password styleClass="form-control" id="pass"
+									value="#{qlLoginSignUpController.user.passWord}" maxlength="16"
+									required="true">
+								</p:password>
+							</div>
+						</div>
+
+						<p:outputLabel style="color:blue" value="THÔNG TIN CÁ NHÂN" />
+						<div class="EmptyBox10" />
+						<div class="form-horizontal">
+							<div class="form-group">
+								<p:outputLabel class="col-sm-3 col-md-3 control-label"
+									value="Họ và tên:" for="txtContactname" />
+
+								<div class="col-sm-9 col-md-9">
+									<p:inputText styleClass="form-control" id="txtContactname"
+										value="#{qlLoginSignUpController.user.fullName}"
+										maxlength="100" required="true">
+									</p:inputText>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<p:outputLabel class="col-sm-3 col-md-3 control-label"
+									value="Giới tính:" for="gender" />
+								<div class="col-sm-9 col-md-9">
+									<p:selectOneRadio columns="2" layout="responsive"
+										styleClass="form-control"
+										value="#{qlLoginSignUpController.user.gender}" id="gender">
+										<f:selectItem itemLabel="Nam" itemValue="1"></f:selectItem>
+										<f:selectItem itemLabel="Nữ" itemValue="0"></f:selectItem>
+									</p:selectOneRadio>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<p:outputLabel class="col-sm-3 col-md-3 control-label"
+									value="Ngày sinh:" for="birthd" />
+								<div class="col-sm-9 col-md-9">
+									<p:calendar id="birthd" required="true"
+										styleClass="form-control" mask="true" pattern="dd-MM-yyyy"
+										value="#{qlLoginSignUpController.user.birthDay}">
+									</p:calendar>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<p:outputLabel class="col-sm-3 col-md-3 control-label"
+									value="Số điện thoại:" for="txtSdt" />
+								<div class="col-sm-9 col-md-9">
+									<p:inputText id="txtSdt" styleClass="form-control"
+										value="#{qlLoginSignUpController.user.phone}"
+										onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;"
+										maxlength="11" required="true">
+									</p:inputText>
+									<p:message for="txtSdt" display="tooltip"></p:message>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<p:outputLabel class="col-sm-3 col-md-3 control-label"
+									value="Địa chỉ:" for="txtAddress" />
+								<div class="col-sm-9 col-md-9">
+									<p:inputText placeholder="Số nhà, (Ngõ), Tên đường..."
+										styleClass="form-control" id="txtAddress"
+										value="#{qlLoginSignUpController.user.address}" maxlength="60"
+										required="true">
+									</p:inputText>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<p:outputLabel styleClass="col-sm-3 col-md-3 control-label"
+									value="Tỉnh/ TP:" for="province" />
+								<div class="col-sm-3 col-md-3">
+									<p:selectOneMenu id="province"
+										value="#{qlLoginSignUpController.user.tinhTp}"
+										styleClass="form-control" filter="true"
+										filterMatchMode="contains" required="true">
+										<f:selectItem itemLabel="" itemValue=""></f:selectItem>
+										<f:selectItems value="#{danhmucUtils.getDmhcProvince()}"
+											var="province" itemLabel="#{province.provinceName}"
+											itemValue="#{province.provinceId}"></f:selectItems>
+										<p:ajax event="change" update="diaChi-quan" process="@this"></p:ajax>
+									</p:selectOneMenu>
+
+								</div>
+
+								<p:outputLabel styleClass="col-sm-3 col-md-3 control-label"
+									value="Quận/ Huyện:" for="diaChi-quan" />
+								<div class="col-sm-3 col-md-3">
+									<p:selectOneMenu id="diaChi-quan"
+										value="#{qlLoginSignUpController.user.quanHuyen}"
+										styleClass="form-control" filter="true"
+										filterMatchMode="contains" required="true">
+										<f:selectItem itemLabel="" itemValue=""></f:selectItem>
+										<f:selectItems
+											value="#{danhmucUtils.getDmhcDistrictByProvinceId(qlLoginSignUpController.user.tinhTp)}"
+											var="district" itemLabel="#{district.districtName}"
+											itemValue="#{district.districtId}"></f:selectItems>
+									</p:selectOneMenu>
+
+								</div>
+							</div>
+
+							<div class="form-group">
+								<p:outputLabel class="col-sm-3 col-md-3 control-label"
+									value="Email:" for="txtEmail" />
+								<div class="col-sm-9 col-md-9">
+									<p:inputText id="txtEmail" styleClass="form-control"
+										value="#{qlLoginSignUpController.user.email}" maxlength="50"
+										required="true" placeholder="abc@gmail.com">
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+
+						<div class="text-center">
+							<p:commandButton
+								actionListener="#{qlLoginSignUpController.doSignUp()}"
+								value="Đăng Ký" icon="fa fa-plus" update="formSignUp"
+								oncomplete="PF('bestSale').hide()">
+							</p:commandButton>
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:panel>
+		</p:dialog>
+	</h:form>
+</ui:composition>

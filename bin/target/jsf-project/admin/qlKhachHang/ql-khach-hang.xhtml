@@ -1,0 +1,218 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/hsdn-master.xhtml">
+
+	<ui:define name="main">
+
+		<h:form id="frmTBLNhanVien">
+			<ui:param name="controller" value="#{qlKhachHangController}"></ui:param>
+			<ui:param name="entity" value="#{qlKhachHangController.entity}"></ui:param>
+			<h1 style="color: #0c71ac">QUẢN LÝ KHÁCH HÀNG</h1>
+			<p:panel styleClass="card" toggleable="true">
+				<p:outputPanel id="frmSearch" styleClass="col-sm-12 col-md-12"
+					class="form-horizontal">
+
+					<div class="EmptyBox5" />
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-2 col-md-2  control-label"
+							value="Họ và tên:" />
+						<div class="col-sm-4 col-md-4">
+							<p:inputText styleClass="form-control" value="#{entity.fullName}"
+								maxlength="50">
+							</p:inputText>
+						</div>
+
+						<p:outputLabel class="col-sm-2 col-md-2  control-label"
+							value="Tên tài khoản:" />
+						<div class="col-sm-4 col-md-4">
+							<p:inputText styleClass="form-control" value="#{entity.userName}"
+								maxlength="20">
+							</p:inputText>
+						</div>
+					</div>
+
+					<div class="EmptyBox5" />
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-2 col-md-2 control-label"
+							value="Giới tính:" />
+						<div class="col-sm-4 col-md-4">
+							<p:selectOneMenu styleClass="form-control"
+								value="#{entity.gender}">
+								<f:selectItem></f:selectItem>
+								<f:selectItem itemLabel="Nam" itemValue="1"></f:selectItem>
+								<f:selectItem itemLabel="Nữ" itemValue="0"></f:selectItem>
+							</p:selectOneMenu>
+						</div>
+
+						<p:outputLabel class="col-sm-2 col-md-2 control-label"
+							value="Ngày sinh:" />
+						<div class="col-sm-4 col-md-4">
+							<p:calendar styleClass="form-control" pattern="dd/MM/yyyy"
+								value="#{entity.birthDay}" showOn="button" />
+						</div>
+					</div>
+
+					<div class="EmptyBox5" />
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-2 col-md-2  control-label"
+							value="Địa chỉ : " />
+						<div class="col-sm-4 col-md-4">
+							<p:inputText styleClass="form-control" value="#{entity.address}"
+								maxlength="100">
+							</p:inputText>
+						</div>
+
+						<p:outputLabel class="col-sm-2 col-md-2  control-label"
+							value="Trạng thái : " />
+						<div class="col-sm-4 col-md-4">
+							<p:selectOneMenu styleClass="form-control"
+								value="#{entity.status}">
+								<f:selectItem></f:selectItem>
+								<f:selectItem itemLabel="Đang hoạt động" itemValue="1"></f:selectItem>
+								<f:selectItem itemLabel="Ngừng hoạt động" itemValue="0"></f:selectItem>
+							</p:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="EmptyBox5" />
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-2 col-md-2  control-label"
+							value="Email:" />
+						<div class="col-sm-4 col-md-4">
+							<p:inputText styleClass="form-control" value="#{entity.email}"
+								maxlength="50">
+							</p:inputText>
+						</div>
+
+						<p:outputLabel class="col-sm-2 col-md-2  control-label"
+							value="Số điện thoại : " />
+						<div class="col-sm-4 col-md-4">
+							<p:inputText styleClass="form-control"
+								onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;"
+								value="#{entity.phone}" maxlength="11">
+							</p:inputText>
+						</div>
+					</div>
+
+					<div class="EmptyBox5" />
+
+					<div class="form-horizontal" style="text-align: center">
+						<div class="text-bottom">
+							<p:commandButton value="#{msg['common.button.label.search']}"
+								icon="ui-icon-search" id="btnTimkiem"
+								actionListener="#{controller.onSearch()}"
+								update="frmTBLNhanVien:tblNhanVien">
+							</p:commandButton>
+							<p:commandButton value="#{msg['common.button.label.reset']}"
+								icon="fa fa-refresh" id="reset"
+								actionListener="#{controller.resetDialogForm()}"
+								update="frmSearch">
+							</p:commandButton>
+						</div>
+					</div>
+
+					<div class="EmptyBox5" />
+
+				</p:outputPanel>
+			</p:panel>
+			<p:panel id="toggleable" header="Danh sách khách hàng"
+				styleClass="card" toggleable="true">
+				<p:outputPanel>
+					<br />
+					<p:dataTable id="tblNhanVien" paginator="true" rows="10"
+						value="#{controller.list}" var="item" paginatorPosition="bottom"
+						rowsPerPageTemplate="5,10,20"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						emptyMessage="#{msg['datatable.label.notfound']}">
+
+						<f:facet name="header">
+							<p:outputPanel style="text-align: left;">
+								<h:outputText
+									value="Tổng số Khách hàng : #{controller.list.size()}"></h:outputText>
+							</p:outputPanel>
+						</f:facet>
+						<p:column headerText="Họ và Tên">
+							<h:outputText value="#{item.fullName}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Tên tài khoản">
+							<h:outputText value="#{item.userName}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Mật khẩu">
+							<h:outputText value="#{item.passWord}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Email">
+							<h:outputText value="#{item.email}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Ngày sinh" style="text-align:center">
+							<h:outputText value="#{item.birthDay}">
+								<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Giới tính">
+							<h:outputText rendered="#{item.gender == 1}" value="Nam" />
+							<h:outputText rendered="#{item.gender == 0}" value="Nữ" />
+						</p:column>
+
+						<p:column headerText="Địa chỉ">
+							<h:outputText value="#{item.address}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Số điện thoại">
+							<h:outputText value="#{item.phone}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Ngày đăng ký" style="text-align:center">
+							<h:outputText value="#{item.created}">
+								<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+							</h:outputText>
+						</p:column>
+
+						<p:column width="80" style="text-align:center"
+							headerText="#{msg['common.table.col-header.action']}">
+
+							<p:commandButton id="delete"
+								value="#{msg['common.button.label.delete']}"
+								icon="fa fa-fw fa-remove" style="text-align:center;"
+								actionListener="#{controller.onDelete(item)}"
+								update="frmTBLNhanVien:tblNhanVien">
+
+								<p:confirm header="Xóa bản ghi"
+									message="#{msg['common.confirmDialog.message']}"
+									icon="ui-icon-alert">
+								</p:confirm>
+							</p:commandButton>
+
+							<p:confirmDialog global="true" widgetVar="confirmdlg"
+								showEffect="bounce" hideEffect="fade">
+								<p:commandButton value="#{msg['common.confirmDialog.yes']}"
+									styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+									update="frmTBLNhanVien">
+								</p:commandButton>
+
+								<p:commandButton value="#{msg['common.confirmDialog.no']}"
+									styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+									onclick="PF('confirmdlg').hide();" type="button">
+								</p:commandButton>
+							</p:confirmDialog>
+						</p:column>
+
+					</p:dataTable>
+				</p:outputPanel>
+			</p:panel>
+			<br />
+			<br />
+		</h:form>
+	</ui:define>
+</ui:composition>

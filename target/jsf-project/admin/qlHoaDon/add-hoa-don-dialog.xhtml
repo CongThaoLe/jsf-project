@@ -1,0 +1,132 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form id="dlgAddAcc">
+		<ui:param name="controller" value="#{qlHoaDonController}"></ui:param>
+		<ui:param name="entity" value="#{qlHoaDonController.cate}"></ui:param>
+		<p:dialog id="dlgAddAcc" modal="true" closable="true"
+			closeOnEscape="true" header="Cập nhật trạng thái đơn hàng"
+			widgetVar="dlgAddAcc" minHeight="600" minWidth="600" height="1500"
+			width="800">
+			<div class="form-group">
+				<p:outputLabel class="col-sm-3 col-md-3  control-label"
+					value="Trạng thái đơn hàng: " for="status" />
+				<div class="col-sm-9 col-md-9">
+					<p:selectOneMenu
+						style="color:red;font-weight:bold"
+						id="status" required="true" styleClass="form-control"
+						value="#{entity.status}">
+						<f:selectItem></f:selectItem>
+						<f:selectItem itemLabel="Đã nhận đơn hàng" itemValue="0"></f:selectItem>
+						<f:selectItem itemLabel="Đang giao hàng" itemValue="1"></f:selectItem>
+						<f:selectItem itemLabel="Đơn hàng hoàn tất" itemValue="2"></f:selectItem>
+					</p:selectOneMenu>
+				</div>
+			</div>
+			<br/>
+			<p:panel styleClass="card pnlTableResize"
+				style="background-color: #e0ebff">
+				<p:outputLabel value=" ĐƠN ĐẶT HÀNG"
+					style="color:#2191c0;font-size:18px;text-align:center" />
+
+				<p:dataTable id="tblCartOrder" value="#{controller.listDetail}"
+					var="cartorder" lazy="true" rows="3" paginator="true"
+					paginatorPosition="bottom"
+					paginatorTemplate="{PreviousPageLink} {PageLinks} {NextPageLink}">
+					<f:facet name="footer">
+						<p:outputPanel style="text-align:right">
+							<h:outputText style="color:red;margin-right:80px"
+								value="Tổng tiền thanh toán:" />
+
+							<p:outputLabel style="color:red;text-align:right"
+								value="#{controller.total}"> VNĐ
+									<f:convertNumber locale="vi_VN" />
+							</p:outputLabel>
+						</p:outputPanel>
+					</f:facet>
+
+					<p:column width="70" headerText="Tên sách" style="text-align:left">
+						<p:outputLabel
+							value="#{controller.getProductById(cartorder.productId).name}" />
+					</p:column>
+
+					<p:column width="20" style="text-align: right"
+						headerText="Số lượng">
+						<p:outputLabel value="#{cartorder.count}">
+							<f:convertNumber locale="vi_VN" />
+						</p:outputLabel>
+					</p:column>
+
+					<p:column width="30" style="text-align: right"
+						headerText="Thành tiền (VNĐ)">
+						<p:outputLabel value="#{cartorder.money * cartorder.count}">
+							<f:convertNumber locale="vi_VN" />
+						</p:outputLabel>
+					</p:column>
+				</p:dataTable>
+
+				<p:panel header="Thông tin thanh toán"
+					styleClass="card pnlTableResize">
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3" value="Họ tên:" />
+						<div class="col-sm-9 col-md-9">
+							<p:outputLabel value="#{controller.customer.fullName}" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3"
+							value="Địa chỉ nhận hàng:" />
+						<div class="col-sm-9 col-md-9">
+							<p:outputLabel value="#{controller.customer.address}" />
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3" value="Thành phố:" />
+						<div class="col-sm-9 col-md-9">
+							<p:outputLabel
+								value="#{danhmucUtils.getDmhcProvinceById(controller.customer.tinhTp).provinceName}" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3" value="Quận huyện:" />
+						<div class="col-sm-9 col-md-9">
+							<p:outputLabel
+								value="#{danhmucUtils.getDistrictByProvinceId(controller.customer.quanHuyen).districtName}" />
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3" value="Số điện thoại:" />
+						<div class="col-sm-9 col-md-9">
+							<p:outputLabel value="#{controller.customer.phone}" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3" value="Email:" />
+						<div class="col-sm-9 col-md-9">
+							<p:outputLabel value="#{controller.customer.email}" />
+						</div>
+					</div>
+				</p:panel>
+			</p:panel>
+			<div class="text-center">
+				<p:commandButton id="btnUpdate"
+					value="#{msg['common.button.label.update']}"
+					icon="fa fa-fw fa-edit"
+					actionListener="#{controller.onComfirmUpdate()}"
+					update="frmTBLNhanVien:tblNhanVien,frmTBLNhanVien"
+					rendered="#{controller.flag eq 2}">
+				</p:commandButton>
+			</div>
+		</p:dialog>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+</h:head>
+<h:body>
+	<p:dialog id="warn_tc_hhl" widgetVar="warn_tc_hhl" styleClass="dialog"
+		closeOnEscape="true" closable="true" modal="true"
+		header="Cảnh báo tiêu chí sắp hết hạn">
+		<h:outputText value="Có tiêu chí sắp hết hạn hiệu lực. " />
+		<h:outputLink
+			value="#{facesContext.externalContext.requestContextPath}/tcpl/vcis/canhbao/danh-sach-canh-bao.xhtml">
+			<h:outputText
+				style="color: red;font-style: italic;font-weight: bold;"
+				value="Click xem chi tiết"></h:outputText>
+		</h:outputLink>
+	</p:dialog>
+</h:body>
+</html>

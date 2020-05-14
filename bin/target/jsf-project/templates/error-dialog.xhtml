@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<h:head>
+		<title>Lỗi thao tác</title>
+		<h:outputScript library="primefaces-omg" name="js/bootstrap.min.js"></h:outputScript>
+		<h:outputStylesheet library="primefaces-omg" name="css/bootstrap.min.css"></h:outputStylesheet>
+	</h:head>
+	<p:outputPanel style="min-height:150px">
+		<h:form id="formDialogError1" style="margin: 20px 20px 5px 20px">
+				<h:outputText style="white-space: pre-wrap;word-wrap: break-word;max-height: 100px;overflow: auto;" rendered="#{empty sessionScope.summaries}" value="Lỗi #{sessionScope.summary}"></h:outputText>
+				<p:outputPanel rendered="#{not empty sessionScope.summaries}" style="max-height:100px; overflow-y: auto">
+						<ul>
+					<ui:repeat var="m" value="#{sessionScope.summaries}">
+						<li><h:outputText value="Lỗi #{m}"></h:outputText></li>
+					</ui:repeat>
+					</ul>
+				</p:outputPanel>
+				<p:outputPanel 
+					rendered="#{not empty sessionScope.stackTraces}">
+					<a id="show-message" data-toggle="collapse"
+						data-target="#trace-message" aria-expanded="false" style="cursor: pointer"> <strong>Hiện
+							chi tiết lỗi</strong>
+					</a>
+					<i class="btn-copy fa fa-clipboard" style="float: right"
+						title="Sao chép lỗi"></i>
+
+					<div id="trace-message" class="collapse alert alert-danger" aria-expanded="false"
+						style="color: red;">
+						#{sessionScope.stackTraces}</div>
+			</p:outputPanel>
+		</h:form>
+	</p:outputPanel>
+		
+		<div style="display: none">
+		#{sessionScope.remove("summary")}
+		#{sessionScope.remove("summaries")}
+		#{sessionScope.remove("stackTraces")}
+		</div>
+		
+		<script>
+			$('#show-message').on('click', function (){
+				console.log('show-message click');
+				window.parent.$('.ui-dialog-content iframe').css("height", "500px");
+			});
+		</script>
+</ui:composition>

@@ -1,0 +1,165 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="frmThanhToan">
+		<p:dialog id="LoginRequireDlg" modal="true" height="80" width="70"
+			widgetVar="LoginRequireDlg" closable="true" closeOnEscape="true"
+			rendered="#{qlThanhToanController.getCustomerLogin() == null}">
+			<p:panel>
+				<p:outputPanel style="text-align:center">
+					<div class="col-sm-12 col-md-12 text-center">
+						<p:outputLabel style="font-size:14px;color: red"
+							value="Bạn cần đăng nhập để tiến hành thanh toán" />
+					</div>
+					<div class="text-center">
+						<p:commandButton value="ĐĂNG NHẬP" onclick="PF('dlgLogin').show()"
+							oncomplete="PF('LoginRequireDlg').hide()" immediate="true">
+						</p:commandButton>
+					</div>
+				</p:outputPanel>
+			</p:panel>
+		</p:dialog>
+
+		<p:dialog id="dlgXacNhan" modal="true" closable="true"
+			closeOnEscape="true" header="Xác nhận thông tin thanh toán"
+			widgetVar="xacNhanThanhToanDialog" style="background-color: #e0ebff"
+			rendered="#{qlThanhToanController.getCustomerLogin() != null}"
+			width="800" height="1500">
+			<p:panel header="Sách đã chọn mua" styleClass="card pnlTableResize">
+				<p:outputPanel>
+					<p:dataTable id="tblCart" var="cartDt"
+						rowIndexVar="index"
+						rows="3"
+						value="#{qlThanhToanController.getListCart()}" 
+						paginator="true"
+						paginatorPosition="bottom" 
+						paginatorTemplate="{PreviousPageLink} {PageLinks} {NextPageLink}">
+
+						<f:facet name="footer">
+							<p:outputPanel style="text-align:right">
+								<h:outputText style="color:red;margin-right:80px"
+									value="Tổng tiền thanh toán:" />
+
+								<p:outputLabel style="color:red;text-align:right"
+									value="#{qlThanhToanController.getTotalMoney()}"> VNĐ
+									<f:convertNumber locale="vi_VN" />
+								</p:outputLabel>
+							</p:outputPanel>
+						</f:facet>
+
+						<p:column headerText="Tên sách" style="text-align:left">
+							<p:outputLabel value="#{cartDt.name}" />
+						</p:column>
+
+						<p:column style="text-align: right"
+							headerText="Giảm giá">
+							<p:outputLabel rendered="#{cartDt.priceSale != null}" style="color:red"
+								value="#{cartDt.priceSale} VNĐ">
+								<f:convertNumber locale="vi_VN" />
+							</p:outputLabel>
+						</p:column>
+
+						<p:column style="text-align: right"
+							headerText="Số lượng">
+							<p:outputLabel value="#{cartDt.count}">
+								<f:convertNumber locale="vi_VN" />
+							</p:outputLabel>
+						</p:column>
+
+						<p:column style="text-align: right"
+							headerText="Thành tiền (VNĐ)">
+							<p:outputLabel
+								value="#{(cartDt.price * cartDt.count) - (cartDt.priceSale)}">
+								<f:convertNumber locale="vi_VN" />
+							</p:outputLabel>
+						</p:column>
+					</p:dataTable>
+				</p:outputPanel>
+			</p:panel>
+			<p:panel header="Thông tin thanh toán"
+				styleClass="card pnlTableResize">
+
+				<div class="form-group">
+					<p:outputLabel class="col-sm-3 col-md-3" value="Họ tên:" />
+					<div class="col-sm-9 col-md-9">
+						<p:outputLabel value="#{qlThanhToanController.cate.fullName}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<p:outputLabel class="col-sm-3 col-md-3" value="Địa chỉ nhận hàng:" />
+					<div class="col-sm-9 col-md-9">
+						<p:outputLabel value="#{qlThanhToanController.cate.address}" />
+					</div>
+				</div>
+
+
+				<div class="form-group">
+					<p:outputLabel class="col-sm-3 col-md-3" value="Thành phố:" />
+					<div class="col-sm-9 col-md-9">
+						<p:outputLabel
+							value="#{danhmucUtils.getDmhcProvinceById(qlThanhToanController.cate.tinhTp).provinceName}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<p:outputLabel class="col-sm-3 col-md-3" value="Quận huyện:" />
+					<div class="col-sm-9 col-md-9">
+						<p:outputLabel
+							value="#{danhmucUtils.getDistrictByProvinceId(qlThanhToanController.cate.quanHuyen).districtName}" />
+					</div>
+				</div>
+
+
+				<div class="form-group">
+					<p:outputLabel class="col-sm-3 col-md-3" value="Số điện thoại:" />
+					<div class="col-sm-9 col-md-9">
+						<p:outputLabel value="#{qlThanhToanController.cate.phone}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<p:outputLabel class="col-sm-3 col-md-3" value="Email:" />
+					<div class="col-sm-9 col-md-9">
+						<p:outputLabel value="#{qlThanhToanController.rs.email}" />
+					</div>
+				</div>
+			</p:panel>
+			<div class="EmptyBox10"/>
+			
+
+			<div class="text-center">
+				<p:commandButton value="Xác Nhận"
+					actionListener="#{qlThanhToanController.onSubmitPayment()}"
+					onclick="PF('xacNhanThanhToanDialog').hide();"
+					oncomplete="PF('loadDlg').hide();PF('dlgPaySucces').show()"
+					onstart="PF('loadDlg').show()">
+				</p:commandButton>
+
+				<p:commandButton type="button" immediate="true" value="Hủy"
+					icon="ui-icon-cancel"
+					onclick="PF('xacNhanThanhToanDialog').hide();">
+				</p:commandButton>
+			</div>
+
+			
+		</p:dialog>
+		<p:dialog id="loadDlg" widgetVar="loadDlg" modal="true"
+			draggable="false" closable="false" showHeader="false" width="600px"
+			height="65px">
+			<div class="form-group">
+				<div class="text-center" style="text-align: center">
+					<p:graphicImage name="/loading.gif" library="primefaces-omg" />
+				</div>
+				<div class="text-center" style="text-align: center">
+					<p:outputLabel style="color:red;font-size:15px"
+						value="Hệ thống đang xử lý...Bạn đợi một chút nhé ^^!" />
+				</div>
+			</div>
+		</p:dialog>
+	</h:form>
+	<ui:include src="thanh-toan-thanh-cong.xhtml"></ui:include>
+</ui:composition>

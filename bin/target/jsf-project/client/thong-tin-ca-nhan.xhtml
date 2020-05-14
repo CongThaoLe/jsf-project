@@ -1,0 +1,149 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form id="thongtinCN">
+		<ui:param name="entity"
+			value="#{qlThongTinKhachHangController.customer}"></ui:param>
+		<p:panel styleClass="card pnlTableResize" header="THÔNG TIN CÁ NHÂN"
+			style="background-color: #e0ebff">
+			<p:outputPanel>
+				<div class="form-horizontal">
+					<p:outputLabel style="color:#e0ebff" value="THÔNG TIN" />
+					<div class="form-horizontal">
+						<div class="form-group">
+							<p:outputLabel class="col-sm-2 col-md-2 control-label"
+								value="Họ và tên:" for="txtContactname" />
+
+							<div class="col-sm-6 col-md-6">
+								<p:inputText styleClass="form-control" id="txtContactname"
+									value="#{entity.fullName}" maxlength="100" required="true">
+								</p:inputText>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<p:outputLabel class="col-sm-2 col-md-2 control-label"
+								value="Giới tính:" for="gender" />
+							<div class="col-sm-6 col-md-6">
+								<p:selectOneRadio columns="2" layout="responsive"
+									styleClass="form-control" value="#{entity.gender}" id="gender"
+									required="true">
+									<f:selectItem itemLabel="Nam" itemValue="1"></f:selectItem>
+									<f:selectItem itemLabel="Nữ" itemValue="0"></f:selectItem>
+								</p:selectOneRadio>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<p:outputLabel class="col-sm-2 col-md-2 control-label"
+								value="Ngày sinh:" for="birthd" />
+							<div class="col-sm-6 col-md-6">
+								<p:calendar id="birthd" required="true"
+									styleClass="form-control" mask="true" pattern="dd-MM-yyyy"
+									value="#{entity.birthDay}">
+								</p:calendar>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<p:outputLabel class="col-sm-2 col-md-2 control-label"
+								value="Số điện thoại:" for="txtSdt" />
+							<div class="col-sm-6 col-md-6">
+								<p:inputText id="txtSdt" styleClass="form-control"
+									value="#{entity.phone}"
+									onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;"
+									maxlength="11" required="true">
+								</p:inputText>
+								<p:message for="txtSdt" display="tooltip"></p:message>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<p:outputLabel class="col-sm-2 col-md-2 control-label"
+								value="Địa chỉ:" for="txtAddress" />
+							<div class="col-sm-6 col-md-6">
+								<p:inputText placeholder="Số nhà, (Ngõ), Tên đường..."
+									styleClass="form-control" id="txtAddress"
+									value="#{entity.address}" maxlength="60" required="true">
+								</p:inputText>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<p:outputLabel styleClass="col-sm-2 col-md-2 control-label"
+								value="Tỉnh/ TP:" for="province" />
+							<div class="col-sm-2 col-md-2">
+								<p:selectOneMenu id="province" value="#{entity.tinhTp}"
+									styleClass="form-control" filter="true"
+									filterMatchMode="contains" required="true">
+									<f:selectItem itemLabel="" itemValue=""></f:selectItem>
+									<f:selectItems value="#{danhmucUtils.getDmhcProvince()}"
+										var="province" itemLabel="#{province.provinceName}"
+										itemValue="#{province.provinceId}"></f:selectItems>
+									<p:ajax event="change" update="diaChi-quan"></p:ajax>
+								</p:selectOneMenu>
+
+							</div>
+
+							<p:outputLabel styleClass="col-sm-2 col-md-2 control-label"
+								value="Quận/ Huyện:" for="diaChi-quan" />
+							<div class="col-sm-2 col-md-2">
+								<p:selectOneMenu id="diaChi-quan" value="#{entity.quanHuyen}"
+									styleClass="form-control" filter="true"
+									filterMatchMode="contains" required="true">
+									<f:selectItem itemLabel="" itemValue=""></f:selectItem>
+									<f:selectItems
+										value="#{danhmucUtils.getDmhcDistrictByProvinceId(entity.tinhTp)}"
+										var="district" itemLabel="#{district.districtName}"
+										itemValue="#{district.districtId}"></f:selectItems>
+								</p:selectOneMenu>
+
+							</div>
+						</div>
+
+						<div class="form-group">
+							<p:outputLabel class="col-sm-2 col-md-2 control-label"
+								value="Email:" for="txtEmail" />
+							<div class="col-sm-6 col-md-6">
+								<p:inputText id="txtEmail" styleClass="form-control"
+									value="#{entity.email}" maxlength="50" required="true"
+									placeholder="abc@gmail.com">
+								</p:inputText>
+							</div>
+						</div>
+
+						<h1 style="color: #e0ebff" value=" ĐỔI MẬT KHẨU" />
+						<div class="form-group">
+							<p:outputLabel class="col-sm-2 col-md-2 control-label"
+								value="Tên đăng nhập :" for="username" />
+							<div class="col-sm-6 col-md-6">
+								<p:inputText disabled="true" styleClass="form-control"
+									id="username" value="#{entity.userName}" required="true">
+								</p:inputText>
+
+							</div>
+						</div>
+						<div class="form-group">
+							<p:outputLabel class="col-sm-2 col-md-2 control-label"
+								value="Mật khẩu:" />
+							<div class="col-sm-6 col-md-6">
+								<p:password redisplay="true" styleClass="form-control" id="pass"
+									value="#{entity.passWord}" maxlength="16">
+								</p:password>
+							</div>
+						</div>
+					</div>
+
+					<div class="text-center">
+						<p:commandButton
+							actionListener="#{qlThongTinKhachHangController.UpdateProfile()}"
+							value="Cập nhật" icon="fa fa-plus" update="@([id$=thongtinCN])">
+						</p:commandButton>
+					</div>
+				</div>
+			</p:outputPanel>
+		</p:panel>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,167 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/hsdn-master.xhtml">
+
+	<ui:define name="main">
+
+		<h:form id="frmTBLNhanVien">
+			<ui:param name="controller" value="#{qlNhaCungCaptroller}"></ui:param>
+			<ui:param name="entity" value="#{qlNhaCungCaptroller.entity}"></ui:param>
+			<h1 style="color: #0c71ac">QUẢN LÝ NHÀ XUẤT BẢN</h1>
+			<p:panel styleClass="card" toggleable="true">
+				<p:outputPanel id="frmSearch" styleClass="col-sm-12 col-md-12"
+					class="form-horizontal">
+
+					<div class="EmptyBox5" />
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-2 col-md-2  control-label"
+							value="Tên nhà xuất bản:" />
+						<div class="col-sm-4 col-md-4">
+							<p:inputText styleClass="form-control" value="#{entity.fullName}"
+								maxlength="50">
+							</p:inputText>
+						</div>
+
+						<p:outputLabel class="col-sm-2 col-md-2  control-label"
+							value="Mã nhà xuất bản:" />
+						<div class="col-sm-4 col-md-4">
+							<p:inputText styleClass="form-control" value="#{entity.code}"
+								maxlength="20">
+							</p:inputText>
+						</div>
+					</div>
+
+					<div class="EmptyBox5" />
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-2 col-md-2  control-label"
+							value="Từ khóa:" />
+						<div class="col-sm-4 col-md-4">
+							<p:inputText styleClass="form-control" value="#{entity.keyWord}"
+								maxlength="50">
+							</p:inputText>
+						</div>
+
+						<p:outputLabel class="col-sm-2 col-md-2  control-label"
+							value="Ngày tạo:" />
+						<div class="col-sm-4 col-md-4">
+							<p:calendar styleClass="form-control" pattern="dd/MM/yyyy"
+								value="#{entity.created}" showOn="button" />
+						</div>
+					</div>
+
+					<div class="EmptyBox5" />
+
+					<div class="form-horizontal" style="text-align: center">
+						<div class="text-bottom">
+							<p:commandButton value="#{msg['common.button.label.search']}"
+								icon="ui-icon-search" id="btnTimkiem"
+								actionListener="#{controller.onSearch()}"
+								update="frmTBLNhanVien:tblNhanVien">
+							</p:commandButton>
+							<p:commandButton value="#{msg['common.button.label.reset']}"
+								icon="fa fa-refresh" id="reset"
+								actionListener="#{controller.resetDialogForm()}"
+								update="frmSearch">
+							</p:commandButton>
+						</div>
+					</div>
+
+					<div class="EmptyBox5" />
+
+				</p:outputPanel>
+			</p:panel>
+			<p:panel id="toggleable" header="Danh sách Nhà cung cấp"
+				styleClass="card" toggleable="true">
+				<p:outputPanel>
+					<div class="form-horizontal" style="text-align: center">
+						<div class="text-center">
+
+							<p:commandButton id="btnAdd"
+								value="#{msg['common.button.label.add']}" icon="fa fa-plus"
+								actionListener="#{controller.prepareInsert()}"
+								oncomplete="PF('dlgAddAcc').show();" update="dlgAddAcc">
+							</p:commandButton>
+
+						</div>
+					</div>
+					<br />
+					<p:dataTable id="tblNhanVien" paginator="true" rows="10"
+						value="#{controller.list}" var="item" paginatorPosition="bottom"
+						rowsPerPageTemplate="5,10,20"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						emptyMessage="#{msg['datatable.label.notfound']}">
+						<f:facet name="header">
+							<p:outputPanel style="text-align: left;">
+								<h:outputText
+									value="Tổng số Nhà xuất bản : #{controller.list.size()}"></h:outputText>
+							</p:outputPanel>
+						</f:facet>
+						<p:column headerText="Họ và Tên">
+							<h:outputText value="#{item.fullName}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Mã nhà cung cấp">
+							<h:outputText value="#{item.code}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Từ khóa">
+							<h:outputText value="#{item.keyWord}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Ngày tạo" style="text-align:center">
+							<h:outputText value="#{item.created}">
+								<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+							</h:outputText>
+						</p:column>
+
+						<p:column width="164" style="text-align:center"
+							headerText="#{msg['common.table.col-header.action']}">
+
+							<p:commandButton id="update"
+								value="#{msg['common.dialog.header.prefixUpdate']}"
+								style="text-align:center;" icon="fa fa-fw fa-edit"
+								oncomplete="PF('dlgAddAcc').show();"
+								actionListener="#{controller.onUpdate(item.id)}" 
+								update="dlgAddAcc">
+							</p:commandButton>
+
+							<p:commandButton id="delete"
+								value="#{msg['common.button.label.delete']}"
+								icon="fa fa-fw fa-remove" style="text-align:center;"
+								actionListener="#{controller.onDelete(item)}"
+								update="frmTBLNhanVien:tblNhanVien">
+
+								<p:confirm header="Xóa bản ghi"
+									message="#{msg['common.confirmDialog.message']}"
+									icon="ui-icon-alert">
+								</p:confirm>
+							</p:commandButton>
+
+							<p:confirmDialog global="true" widgetVar="confirmdlg"
+								showEffect="bounce" hideEffect="fade">
+								<p:commandButton value="#{msg['common.confirmDialog.yes']}"
+									styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+									update="frmTBLNhanVien">
+								</p:commandButton>
+
+								<p:commandButton value="#{msg['common.confirmDialog.no']}"
+									styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+									onclick="PF('confirmdlg').hide();" type="button">
+								</p:commandButton>
+							</p:confirmDialog>
+						</p:column>
+
+					</p:dataTable>
+				</p:outputPanel>
+			</p:panel>
+			<br />
+			<br />
+		</h:form>
+		<ui:include src="/admin/qlNhaXuatBan/add-nha-xuat-ban-dialog.xhtml"></ui:include>
+	</ui:define>
+</ui:composition>

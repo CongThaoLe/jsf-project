@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<div class="banner">
+		<img class="logo" src="/jsf-project/resources/img/book library.ico" />
+		<div class="site-name">HOÀNG MINH - BOOK STORE</div>
+	</div>
+
+	<h:form id="frmTopmenu">
+		<nav 
+			class="navbarMaster navbar-default navbar-fixed-top col-sm-12 col-md-12">
+
+		<div class="top-menu-element col-sm-6 col-md-6"
+			style="text-align: right;left:350px;color:white">
+			<div class="col-sm-5 col-md-5">
+				<h:outputLabel rendered="#{loginBean.getFullName() != null}"
+					value="#{loginBean.getFullName()} - #{loginBean.getRoleType()}"
+					styleClass="topbar-label">
+				</h:outputLabel>
+			</div>
+			<div class="col-sm-1 col-md-1" style="text-align: right">
+				<p:commandButton icon="fa fa-sign-out"
+					styleClass="top-menu-btn col-sm-3 col-md-3"
+					actionListener="#{loginBean.doLogout()}"
+					title="#{msg['crms.login.btnLogout']}">
+				</p:commandButton>
+			</div>
+		</div>
+		</nav>
+	</h:form>
+</ui:composition>

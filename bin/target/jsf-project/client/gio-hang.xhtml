@@ -1,0 +1,109 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="frmTBLCart">
+		<p:dialog header="Tủ sách của tôi" id="dlgChitiet" styleClass="card"
+			closable="true" modal="true" style="background-color: #e0ebff;"
+			closeOnEscape="true" widgetVar="CartDialog" width="900px">
+			<p:panel>
+				<p:outputPanel>
+					<p:dataTable id="tblCart" var="cart"
+						rows="5"
+						value="#{gioHangController.listSP()}"
+						emptyMessage="Giỏ sách trống.Hãy chọn sách ngay nào!"
+						rowsPerPageTemplate="5,10,15"
+						paginator="true"
+						paginatorPosition="bottom" 
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+						<p:column headerText="Tên sách" style="width: 320px;">
+							<p:outputLabel value="#{cart.name}" />
+						</p:column>
+
+						<p:column style="text-align: right;width: 84px;"
+							headerText="Giảm giá">
+							<p:outputLabel style="color:red" rendered="#{cart.priceSale != null}"
+								value="#{cart.priceSale} VNĐ">
+								<f:convertNumber locale="vi_VN" />
+							</p:outputLabel>
+						</p:column>
+
+						<p:column style="text-align: right;width: 80px;"
+							headerText="Số lượng">
+							<p:outputLabel value="#{cart.count}">
+								<f:convertNumber locale="vi_VN" />
+							</p:outputLabel>
+						</p:column>
+
+						<p:column style="text-align: right;width: 150px;"
+							headerText="Thành tiền (VNĐ)">
+							<p:outputLabel
+								value="#{(cart.price * cart.count) - (cart.priceSale)}">
+								<f:convertNumber locale="vi_VN" />
+							</p:outputLabel>
+						</p:column>
+
+						<p:column style="text-align: center;width: 50px;">
+							<p:commandLink id="delete" title="Xóa sách"
+								actionListener="#{gioHangController.removeToCart(cart.id)}"
+								oncomplete="PF('CartDialog').show();" update="frmTBLCart">
+								<p:graphicImage value="/resources/primefaces-omg/trash.ico" />
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+
+					<div class="EmptyBox20" />
+
+					<div class="form-horizontal"
+						style="color: red; font-size: 16px; padding-left: 250px;">
+						<div class="col-sm-8" style="text-align: right">
+							<p:outputLabel style="text-align:right"
+								value="Tổng tiền thanh toán : ">
+							</p:outputLabel>
+						</div>
+						<div class="col-sm-4" style="text-align: right;">
+							<p:outputLabel id="total" style="text-align:right"
+								value="#{gioHangController.total}"> VNĐ
+								<f:convertNumber locale="vi_VN" />
+							</p:outputLabel>
+						</div>
+					</div>
+
+
+					<div class="EmptyBox20" />
+
+					<div class="text-center">
+						<p:commandButton value="Thanh Toán"
+							style="font-size: 12px;" onclick="PF('CartDialog').hide();" 
+							disabled="#{gioHangController.total le 0}" 
+							oncomplete="PF('LoginRequireDlg').show()" 
+							update="@([id$=LoginRequireDlg])"
+							rendered="#{qlThanhToanController.getCustomerLogin() == null}" 
+							resetValues="true" >
+
+						</p:commandButton>
+						
+						<p:commandButton value="Thanh Toán"
+							style="font-size: 12px;" onclick="PF('CartDialog').hide();" 
+							disabled="#{gioHangController.total le 0}" 
+							oncomplete="PF('xacNhanThanhToanDialog').show()" 
+							update="@([id$=dlgXacNhan])" 
+							resetValues="true" 
+							rendered="#{qlThanhToanController.getCustomerLogin() != null}" 
+							actionListener="#{qlThanhToanController.preparePayment()}">
+
+						</p:commandButton>
+
+						<p:commandButton value="Xem Tiếp"
+							oncomplete="PF('CartDialog').hide();" 
+							immediate="true">
+						</p:commandButton>
+					</div>
+				</p:outputPanel>
+			</p:panel>
+		</p:dialog>
+	</h:form>
+	<ui:include src="thanh-toan-dialog.xhtml"></ui:include>
+</ui:composition>

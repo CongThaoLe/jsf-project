@@ -1,0 +1,18 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<p:dialog header="File đầu vào có lỗi" widgetVar="dlg-error-import"
+		id="dlg-error-import" styleClass="dialog" closeOnEscape="true"
+		closable="true" modal="true">
+		<h:form id="frm-dlg-error-import">
+			<p:outputPanel rendered="#{not empty sessionScope.IMPORT_ERROR}">
+				<div id="trace-message" style="color: red;">
+					<h:outputText escape="false" value="#{sessionScope.IMPORT_ERROR}"></h:outputText>
+				</div>
+			</p:outputPanel>
+		</h:form>
+	</p:dialog>
+
+</ui:composition>

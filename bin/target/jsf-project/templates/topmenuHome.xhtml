@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<div class="banner">
+		<img class="logo" src="/jsf-project/resources/img/book library.ico" />
+		<div class="site-name">MỖI CUỐN SÁCH LÀ MỘT BỨC TRANH KỲ DIỆU VỀ
+			CUỘC SỐNG...</div>
+	</div>
+
+	<h:form id="frmTopmenu">
+		<nav
+			class="navbarMaster navbar-default navbar-fixed-top col-sm-12 col-md-12">
+
+		<div class="top-menu-element col-sm-7 col-md-7"
+			style="text-align: right; left: 350px; color: white">
+			<p:outputPanel
+				rendered="#{qlLoginSignUpController.getParamCusLogin() == null}">
+				<div class="col-sm-3 col-md-3"
+					style="text-align: right; left: 270px;">
+					<p:commandButton value="Đăng nhập"
+						oncomplete="PF('dlgLogin').show()" styleClass="top-menu-btn"
+						update="frmTopmenu">
+					</p:commandButton>
+				</div>
+				<div class="col-sm-3 col-md-3"
+					style="text-align: right; left: 150px;">
+					<p:commandButton value="Đăng ký" styleClass="top-menu-btn"
+						oncomplete="PF('dlgSignUp').show()"
+						actionListener="#{qlLoginSignUpController.onPrepareSignUp()}"
+						resetValues="true">
+					</p:commandButton>
+				</div>
+			</p:outputPanel>
+
+			<p:outputPanel
+				rendered="#{qlLoginSignUpController.getParamCusLogin() != null}">
+				<div class="col-sm-5 col-md-5"
+					style="margin-top: 6px; font-size: 13px">
+					<h:outputLabel
+						value="Xin chào : #{qlLoginSignUpController.getParamCusLogin().getUserName()}"
+						styleClass="topbar-label">
+					</h:outputLabel>
+				</div>
+				<div class="col-sm-2 col-md-2" style="text-align: right">
+					<p:menubar styleClass="topbar-label col-sm-3 col-md-3">
+						<p:submenu label="Thao tác" icon="pi pi-cog">
+							<p:menuitem value="Trang chủ"
+								action="#{qlLoginSignUpController.homePage()}" />
+
+							<p:menuitem value="Thông tin cá nhân"
+								action="#{qlThanhToanController.thongtinPage()}" update="@([id$=tabviewInfor])"/>
+
+							<p:menuitem value="Thoát"
+								action="#{qlLoginSignUpController.doLogOut()}" />
+
+						</p:submenu>
+					</p:menubar>
+				</div>
+			</p:outputPanel>
+		</div>
+		</nav>
+	</h:form>
+
+</ui:composition>

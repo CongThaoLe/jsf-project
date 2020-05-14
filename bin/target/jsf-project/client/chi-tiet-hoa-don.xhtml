@@ -1,0 +1,126 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form id="frmCHITIET">
+		<p:dialog header="THÔNG TIN CHI TIẾT HÓA ĐƠN" id="dlgCTHoaDon"
+			widgetVar="dlgCTHoaDon" closable="true" closeOnEscape="false"
+			width="800" modal="true" height="2000">
+			<p:panel styleClass="card pnlTableResize"
+				style="background-color: #e0ebff">
+				<p:outputLabel value=" ĐƠN ĐẶT HÀNG"
+					style="color:#2191c0;font-size:18px;text-align:center" />
+
+				<p:panel id="shake" style="text-align:center">
+					<p:outputLabel style="color:red" value="ĐÃ NHẬN ĐƠN HÀNG"
+						rendered="#{qlThongTinKhachHangController.order.status == 0}" />
+					<p:outputLabel style="color:blue" value="ĐANG GIAO HÀNG"
+						rendered="#{qlThongTinKhachHangController.order.status == 1}" />
+					<p:outputLabel style="color:green" value="ĐƠN HÀNG HOÀN TẤT"
+						rendered="#{qlThongTinKhachHangController.order.status == 2}" />
+					<p:effect type="shake" event="click" />
+				</p:panel>
+
+				<p:dataTable id="tblCartOrder"
+					value="#{qlThongTinKhachHangController.cartList}" var="cartorder"
+					lazy="true" rows="3"
+					paginator="true" paginatorPosition="bottom"
+					paginatorTemplate="{PreviousPageLink} {PageLinks} {NextPageLink}">
+					<f:facet name="footer">
+						<p:outputPanel style="text-align:right">
+							<h:outputText style="color:red;margin-right:80px"
+								value="Tổng tiền thanh toán:" />
+
+							<p:outputLabel style="color:red;text-align:right"
+								value="#{qlThongTinKhachHangController.total}"> VNĐ
+									<f:convertNumber locale="vi_VN" />
+							</p:outputLabel>
+						</p:outputPanel>
+					</f:facet>
+
+					<p:column width="70" headerText="Tên sách" style="text-align:left">
+						<p:outputLabel
+							value="#{qlThongTinKhachHangController.getProductById(cartorder.productId).name}" />
+					</p:column>
+
+					<p:column width="20" style="text-align: right"
+						headerText="Số lượng">
+						<p:outputLabel value="#{cartorder.count}">
+							<f:convertNumber locale="vi_VN" />
+						</p:outputLabel>
+					</p:column>
+
+					<p:column width="30" style="text-align: right"
+						headerText="Thành tiền (VNĐ)">
+						<p:outputLabel value="#{cartorder.money * cartorder.count}">
+							<f:convertNumber locale="vi_VN" />
+						</p:outputLabel>
+					</p:column>
+				</p:dataTable>
+
+				<p:panel header="Thông tin thanh toán"
+					styleClass="card pnlTableResize">
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3" value="Họ tên:" />
+						<div class="col-sm-9 col-md-9">
+							<p:outputLabel
+								value="#{qlThongTinKhachHangController.customer.fullName}" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3"
+							value="Địa chỉ nhận hàng:" />
+						<div class="col-sm-9 col-md-9">
+							<p:outputLabel
+								value="#{qlThongTinKhachHangController.customer.address}" />
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3" value="Thành phố:" />
+						<div class="col-sm-9 col-md-9">
+							<p:outputLabel
+								value="#{danhmucUtils.getDmhcProvinceById(qlThongTinKhachHangController.customer.tinhTp).provinceName}" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3" value="Quận huyện:" />
+						<div class="col-sm-9 col-md-9">
+							<p:outputLabel
+								value="#{danhmucUtils.getDistrictByProvinceId(qlThongTinKhachHangController.customer.quanHuyen).districtName}" />
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3" value="Số điện thoại:" />
+						<div class="col-sm-9 col-md-9">
+							<p:outputLabel
+								value="#{qlThongTinKhachHangController.customer.phone}" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3" value="Email:" />
+						<div class="col-sm-9 col-md-9">
+							<p:outputLabel
+								value="#{qlThongTinKhachHangController.customer.email}" />
+						</div>
+					</div>
+				</p:panel>
+			</p:panel>
+
+			<div class="EmptyBox20" />
+			<div class="text-center">
+				<p:commandButton value="Đóng" onclick="PF('dlgCTHoaDon').hide();"
+					actionListener="#{qlThongTinKhachHangController.onBack()}">
+				</p:commandButton>
+			</div>
+		</p:dialog>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,189 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form id="dlgAddAcc">
+		<ui:param name="controller" value="#{qlSanPhamController}"></ui:param>
+		<ui:param name="entity" value="#{qlSanPhamController.cate}"></ui:param>
+		<p:dialog id="dlgAddAcc" modal="true" closable="true"
+			closeOnEscape="true"
+			header="#{controller.flag == 1 ? 'Thêm sách' : 'Cập nhật thông tin sách'}"
+			widgetVar="dlgAddAcc" minHeight="1000" minWidth="800" height="1200"
+			width="1000">
+			<p:panel id="add">
+				<p:outputPanel id="frmSearch" styleClass="col-sm-12 col-md-12"
+					class="form-horizontal">
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Tên sách:" for="name" />
+						<div class="col-sm-9 col-md-9">
+							<p:inputText id="name" required="true" value="#{entity.name}"
+								styleClass="form-control" maxlength="200"></p:inputText>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Tên danh mục:" for="catId" />
+						<div class="col-sm-9 col-md-9">
+							<p:selectOneMenu id="catId" required="true"
+								value="#{entity.catId}" styleClass="form-control" filter="true"
+								filterMatchMode="contains">
+								<f:selectItem itemLabel="" itemValue=""></f:selectItem>
+								<f:selectItems value="#{danhmucUtils.loadDmCate()}" var="cate"
+									itemLabel="#{cate.name}" itemValue="#{cate.id}">
+								</f:selectItems>
+							</p:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Tên viết tắt:" />
+						<div class="col-sm-9 col-md-9">
+							<p:inputText value="#{entity.alias}" styleClass="form-control"
+								maxlength="200"></p:inputText>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Mô tả chi tiết:" for="detail" />
+						<div class="col-sm-9 col-md-9">
+							<p:inputTextarea id="detail" required="true" rows="500"
+								value="#{entity.detail}" styleClass="form-control"
+								maxlength="5000"></p:inputTextarea>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Số lượng:" for="number" />
+						<div class="col-sm-9 col-md-9">
+							<p:inputText id="number" required="true" value="#{entity.number}"
+								styleClass="form-control"
+								onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;"
+								maxlength="7"></p:inputText>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Nhà xuất bản:" for="producer" />
+						<div class="col-sm-9 col-md-9">
+							<p:selectOneMenu id="producer" required="true"
+								value="#{entity.idProducer}" styleClass="form-control"
+								filter="true" filterMatchMode="contains">
+								<f:selectItem itemLabel="" itemValue=""></f:selectItem>
+								<f:selectItems value="#{danhmucUtils.loadListProducer()}"
+									var="pro" itemLabel="#{pro.fullName}"
+									itemValue="#{pro.idProducer}">
+								</f:selectItems>
+							</p:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Giá:" for="price" />
+						<div class="col-sm-9 col-md-9">
+							<p:inputNumber id="price" required="true" value="#{entity.price}"
+								maxlength="7" maxValue="9999999" inputStyleClass="form-control"></p:inputNumber>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Tình trạng giảm giá:" for="sale" />
+						<div class="col-sm-9 col-md-9">
+							<p:selectOneMenu id="sale" required="true"
+								styleClass="form-control" value="#{entity.sale}">
+								<f:selectItem></f:selectItem>
+								<f:selectItem itemLabel="Đang giảm giá" itemValue="1"></f:selectItem>
+								<f:selectItem itemLabel="Ngừng giảm giá" itemValue="0"></f:selectItem>
+							</p:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Giảm giá:" />
+						<div class="col-sm-9 col-md-9">
+							<p:inputNumber value="#{entity.priceSale}" maxlength="7"
+								maxValue="9999999" inputStyleClass="form-control"></p:inputNumber>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Trạng thái : " for="status" />
+						<div class="col-sm-9 col-md-9">
+							<p:selectOneMenu id="status" required="true"
+								styleClass="form-control" value="#{entity.status}">
+								<f:selectItem></f:selectItem>
+								<f:selectItem itemLabel="Còn hàng" itemValue="1"></f:selectItem>
+								<f:selectItem itemLabel="Hết hàng" itemValue="0"></f:selectItem>
+							</p:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-sm-3 text-left pull-left">
+							<p:outputLabel styleClass="control-label" value="Ảnh đại diện:"
+								for="avata" />
+						</div>
+						<div class="col-sm-9 col-md-9">
+							<p:fileUpload id="avata" required="true"
+								value="#{controller.bFile}"
+								fileUploadListener="#{controller.handleUploadFile}"
+								label="Chọn file" skinSimple="true"
+								allowTypes="/(\.|\/)(jpg|png|jpeg)$/" sizeLimit="5000048"
+								fileLimitMessage="Dung lượng file quá giới hạn. Giới hạn dung lượng file 3MB"
+								invalidFileMessage="Chỉ được Upload file có định dạng JPG, PNG hoặc JPEG"
+								style="float:left;" />
+						</div>
+<!-- 						<div class="col-sm-6"> -->
+<!-- 							<p:outputLabel id="bFileName" value="#{controller.bFileName}" -->
+<!-- 								style="margin: 5px 10px 0 0;" /> -->
+<!-- 						</div> -->
+					</div>
+					<div class="form-group">
+						<div class="col-sm-3">
+							<p:outputLabel value="" />
+						</div>
+						<div class="col-sm-9 col-md-9">
+							<p:outputLabel
+								value="(Chỉ được Upload file có định dạng JPG, PNG)"
+								style="float:left; margin: 5px 10px 0 0;color:red;" />
+						</div>
+					</div>
+
+					<div class="EmptyBox10" />
+
+					<div class="text-center">
+						<p:commandButton value="Thêm mới" icon="fa fa-plus"
+							actionListener="#{controller.onInsert()}"
+							rendered="#{controller.flag eq 1}"
+							update="frmTBLNhanVien:tblNhanVien" resetValues="true">
+						</p:commandButton>
+
+						<p:commandButton id="btnUpdate" resetValues="true"
+							value="#{msg['common.button.label.update']}"
+							icon="fa fa-fw fa-edit"
+							actionListener="#{controller.onComfirmUpdate()}"
+							update="frmTBLNhanVien:tblNhanVien"
+							rendered="#{controller.flag eq 2}">
+						</p:commandButton>
+
+						<p:commandButton id="btnClose" type="button"
+							value="#{msg['common.button.label.close']}" icon="ui-icon-cancel"
+							onclick="PF('dlgAddAcc').hide();">
+						</p:commandButton>
+					</div>
+				</p:outputPanel>
+			</p:panel>
+		</p:dialog>
+	</h:form>
+</ui:composition>

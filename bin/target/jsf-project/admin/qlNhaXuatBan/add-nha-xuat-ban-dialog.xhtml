@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form id="dlgAddAcc">
+		<ui:param name="controller" value="#{qlNhaCungCaptroller}"></ui:param>
+		<ui:param name="entity" value="#{qlNhaCungCaptroller.entity}"></ui:param>
+		<p:dialog id="dlgAddAcc" modal="true" closable="true"
+			closeOnEscape="true"
+			header="#{qlTaiKhoanController.flag == 1 ? 'Thêm Nhà xuất bản' : 'Cập nhật thông tin Nhà xuất bản'}"
+			widgetVar="dlgAddAcc" minHeight="300" minWidth="700" height="300"
+			width="600">
+			<p:panel id="add">
+				<p:outputPanel id="frmSearch" styleClass="col-sm-12 col-md-12"
+					class="form-horizontal">
+
+					<div class="EmptyBox5" />
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-4 col-md-4  control-label"
+							value="Tên nhà xuất bản:" for="name" />
+						<div class="col-sm-8 col-md-8">
+							<p:inputText id="name" required="true" styleClass="form-control"
+								value="#{entity.fullName}" maxlength="50">
+							</p:inputText>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-4 col-md-4  control-label"
+							value="Mã nhà xuất bản " for="ma" />
+						<div class="col-sm-8 col-md-8">
+							<p:inputText id="ma" required="true" styleClass="form-control"
+								value="#{entity.idProducer}" maxlength="9"
+								onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;">
+							</p:inputText>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-4 col-md-4  control-label"
+							value="Tên viết tắt:" for="code" />
+						<div class="col-sm-8 col-md-8">
+							<p:inputText id="code" required="true" styleClass="form-control"
+								value="#{entity.code}" maxlength="20">
+							</p:inputText>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-4 col-md-4  control-label"
+							value="Từ khóa:" for="key" />
+						<div class="col-sm-8 col-md-8">
+							<p:inputText id="key" required="true" styleClass="form-control"
+								value="#{entity.keyWord}" maxlength="50">
+							</p:inputText>
+						</div>
+					</div>
+
+					<div class="EmptyBox10" />
+
+					<div class="text-center">
+						<p:commandButton value="Thêm mới" icon="fa fa-plus"
+							actionListener="#{controller.onInsert()}"
+							rendered="#{controller.flag eq 1}"
+							update="frmTBLNhanVien:tblNhanVien">
+						</p:commandButton>
+
+						<p:commandButton id="btnUpdate"
+							value="#{msg['common.button.label.update']}"
+							icon="fa fa-fw fa-edit"
+							actionListener="#{controller.onComfirmUpdate()}"
+							update="frmTBLNhanVien:tblNhanVien"
+							rendered="#{controller.flag eq 2}">
+						</p:commandButton>
+
+						<p:commandButton id="btnClose" type="button"
+							value="#{msg['common.button.label.close']}" icon="ui-icon-cancel"
+							onclick="PF('dlgAddAcc').hide();">
+						</p:commandButton>
+					</div>
+				</p:outputPanel>
+			</p:panel>
+		</p:dialog>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,76 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form id="formLogin">
+		<p:dialog id="dlg" header="ĐĂNG NHẬP" widgetVar="dlgLogin"
+			width="500px" height="350px" modal="true" closeOnEscape="true">
+			<p:panel header=" " style="background-color: #e0ebff">
+				<p:outputPanel>
+					<div class="EmptyBox10" />
+
+					<div class="col-sm-12 col-md-12">
+						<p:outputLabel style="text-align:left;font-size:15px;"
+							value="Hãy đăng nhập để tiếp tục..." />
+					</div>
+
+					<div class="EmptyBox20" />
+					<div class="form-horizontal">
+						<div class="form-group">
+							<div class="col-sm-12 text-left pull-left">
+								<p:outputLabel style="font-size:12px;color:red"
+									value="Bạn chưa phải là thành viên?" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-6 text-left pull-left">
+								<p:commandLink value="ĐĂNG KÝ NGAY"
+									onclick="PF('dlgLogin').hide()"
+									immediate="true"
+									style="font-size:12px;color:red;font-weight: bold;max-width:50%;"
+									oncomplete="PF('dlgSignUp').show()"
+									actionListener="#{qlLoginSignUpController.onPrepareSignUp()}">
+								</p:commandLink>
+							</div>
+						</div>
+					</div>
+
+					<div class="EmptyBox30" />
+					<div class="form-group">
+						<div class="col-sm-3 text-left pull-left">
+							<h:outputLabel styleClass="control-label" value="Tên tài khoản:"
+								for="txtUsername" />
+						</div>
+						<div class="col-sm-9 text-left pull-left">
+							<p:inputText id="txtUsername" styleClass="form-control"
+								value="#{qlLoginSignUpController.user.userName}" required="true"
+								maxlength="20" label="Tên tài khoản"
+								requiredMessage="Bạn chưa nhập tên tài khoản" />
+						</div>
+					</div>
+					<div class="EmptyBox10" />
+					<div class="form-group">
+						<div class="col-sm-3 text-left pull-left">
+							<h:outputLabel styleClass="control-label" value="Mật khẩu:"
+								for="txtPassword" />
+						</div>
+						<div class="col-sm-9 text-left pull-left">
+							<p:password id="txtPassword" styleClass="form-control"
+								value="#{qlLoginSignUpController.user.passWord}" required="true"
+								maxlength="16" label="Mật khẩu"
+								requiredMessage="Bạn chưa nhập mật khẩu" />
+						</div>
+					</div>
+					<div class="EmptyBox20" />
+					<div style="text-align: center">
+						<p:commandButton value="Đăng nhập"
+							actionListener="#{qlLoginSignUpController.login()}"
+							oncomplete="PF('bestSale').hide()" update="form" />
+					</div>
+					<div class="EmptyBox20" />
+				</p:outputPanel>
+			</p:panel>
+		</p:dialog>
+	</h:form>
+</ui:composition>

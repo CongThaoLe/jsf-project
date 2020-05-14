@@ -1,0 +1,160 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form id="dlgAddAcc">
+		<ui:param name="controller" value="#{qlTaiKhoanController}"></ui:param>
+		<ui:param name="entity" value="#{qlTaiKhoanController.user}"></ui:param>
+		<p:dialog id="dlgAddAcc" modal="true" closable="true"
+			closeOnEscape="true"
+			header="#{qlTaiKhoanController.flag == 1 ? 'Thêm tài khoản' : 'Cập nhật thông tin tài khoản'}"
+			widgetVar="dlgAddAcc" minHeight="800" minWidth="700" height="1000"
+			width="700">
+			<p:panel id="add">
+				<p:outputPanel id="frmSearch" styleClass="col-sm-13 col-md-13"
+					class="form-horizontal">
+
+					<h3 style="color: blue">Tài khoản</h3>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Tên đăng nhập:" for="username" />
+						<div class="col-sm-9 col-md-9">
+							<p:inputText id="username" styleClass="form-control"
+								value="#{entity.userName}" maxlength="20" required="true">
+							</p:inputText>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Mật khẩu : " for="pass" rendered="#{controller.flag == 1}" />
+						<div class="col-sm-9 col-md-9">
+							<p:password redisplay="true" rendered="#{controller.flag == 1}" id="pass"
+								required="true" styleClass="form-control"
+								value="#{controller.password}" maxlength="16">
+							</p:password>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Mật khẩu : " rendered="#{controller.flag == 2}" />
+						<div class="col-sm-9 col-md-9">
+							<p:password redisplay="true" rendered="#{controller.flag == 2}" styleClass="form-control"
+								value="#{controller.password}" maxlength="16">
+							</p:password>
+						</div>
+					</div>
+
+					<h3 style="color: blue">Thông tin cá nhân</h3>
+
+					<div class="EmptyBox5" />
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Họ và tên:" for="fullName" />
+						<div class="col-sm-9 col-md-9">
+							<p:inputText id="fullName" required="true"
+								styleClass="form-control" value="#{entity.fullName}"
+								maxlength="50">
+							</p:inputText>
+						</div>
+					</div>
+
+					<div class="EmptyBox5" />
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3 control-label"
+							value="Giới tính:" for="gender" />
+						<div class="col-sm-9 col-md-9">
+							<p:selectOneRadio columns="2" layout="responsive"
+								styleClass="form-control" value="#{entity.gender}" id="gender"
+								required="true">
+								<f:selectItem itemLabel="Nam" itemValue="1"></f:selectItem>
+								<f:selectItem itemLabel="Nữ" itemValue="0"></f:selectItem>
+							</p:selectOneRadio>
+						</div>
+
+					</div>
+
+					<div class="EmptyBox5" />
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Vai trò : " for="role" />
+						<div class="col-sm-9 col-md-9">
+							<p:selectOneRadio id="role" columns="2" layout="responsive"
+								required="true" styleClass="form-control" value="#{entity.role}">
+								<f:selectItem itemLabel="Quản Trị" itemValue="1"></f:selectItem>
+								<f:selectItem itemLabel="Nhân Viên Bán Hàng" itemValue="2"></f:selectItem>
+							</p:selectOneRadio>
+						</div>
+					</div>
+
+					<div class="EmptyBox5" />
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Email:" for="email" />
+						<div class="col-sm-9 col-md-9">
+							<p:inputText id="email" required="true" styleClass="form-control"
+								value="#{entity.email}" maxlength="50">
+							</p:inputText>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Số điện thoại : " for="phone" />
+						<div class="col-sm-9 col-md-9">
+							<p:inputText id="phone" required="true" styleClass="form-control"
+								onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;"
+								value="#{entity.phone}" maxlength="15">
+							</p:inputText>
+						</div>
+					</div>
+
+					<div class="EmptyBox5" />
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-3 col-md-3  control-label"
+							value="Trạng thái : " for="status" />
+						<div class="col-sm-9 col-md-9">
+							<p:selectOneMenu id="status" required="true"
+								styleClass="form-control" value="#{entity.status}">
+								<f:selectItem></f:selectItem>
+								<f:selectItem itemLabel="Đang hoạt động" itemValue="1"></f:selectItem>
+								<f:selectItem itemLabel="Ngừng hoạt động" itemValue="0"></f:selectItem>
+							</p:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="EmptyBox10" />
+
+					<div class="text-center">
+						<p:commandButton value="Thêm mới" icon="fa fa-plus"
+							actionListener="#{controller.onInsert()}"
+							rendered="#{controller.flag eq 1}"
+							update="frmTBLNhanVien:tblNhanVien">
+						</p:commandButton>
+
+						<p:commandButton id="btnUpdate"
+							value="#{msg['common.button.label.update']}"
+							icon="fa fa-fw fa-edit"
+							actionListener="#{controller.onComfirmUpdate()}"
+							update="frmTBLNhanVien:tblNhanVien"
+							rendered="#{controller.flag eq 2}">
+						</p:commandButton>
+
+						<p:commandButton id="btnClose" type="button"
+							value="#{msg['common.button.label.close']}" icon="ui-icon-cancel"
+							onclick="PF('dlgAddAcc').hide();">
+						</p:commandButton>
+					</div>
+				</p:outputPanel>
+			</p:panel>
+		</p:dialog>
+	</h:form>
+</ui:composition>

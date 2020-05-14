@@ -1,0 +1,224 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/hsdn-master.xhtml">
+
+	<ui:define name="main">
+
+		<h:form id="frmTBLNhanVien">
+			<ui:param name="controller" value="#{qlSanPhamController}"></ui:param>
+			<ui:param name="entity" value="#{qlSanPhamController.cate}"></ui:param>
+			<h1 style="color: #0c71ac">QUẢN LÝ SÁCH</h1>
+			<p:panel styleClass="card" toggleable="true">
+				<p:outputPanel id="frmSearch" styleClass="col-sm-12 col-md-12"
+					class="form-horizontal">
+
+					<div class="EmptyBox5" />
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-2 col-md-2  control-label"
+							value="Tên sách:" />
+						<div class="col-sm-4 col-md-4">
+							<p:inputText value="#{entity.name}" styleClass="form-control"
+								maxlength="200"></p:inputText>
+						</div>
+
+						<p:outputLabel class="col-sm-2 col-md-2  control-label"
+							value="Tên viết tắt:" />
+						<div class="col-sm-4 col-md-4">
+							<p:inputText value="#{entity.alias}" styleClass="form-control"
+								maxlength="200"></p:inputText>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-2 col-md-2  control-label"
+							value="Số lượng:" />
+						<div class="col-sm-4 col-md-4">
+							<p:inputText value="#{entity.number}" styleClass="form-control"
+								onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;"
+								maxlength="200"></p:inputText>
+						</div>
+
+						<p:outputLabel class="col-sm-2 col-md-2  control-label"
+							value="Nhà xuất bản:" />
+						<div class="col-sm-4 col-md-4">
+							<p:selectOneMenu
+								value="#{entity.idProducer}" styleClass="form-control" filter="true"
+								filterMatchMode="contains">
+								<f:selectItem itemLabel="" itemValue=""></f:selectItem>
+								<f:selectItems value="#{danhmucUtils.loadListProducer()}" var="pro"
+									itemLabel="#{pro.fullName}" itemValue="#{pro.idProducer}">
+								</f:selectItems>
+							</p:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-2 col-md-2  control-label"
+							value="Giá:" />
+						<div class="col-sm-4 col-md-4">
+							<p:inputNumber value="#{entity.price}" maxlength="7"
+								maxValue="9999999" inputStyleClass="form-control"></p:inputNumber>
+						</div>
+
+						<p:outputLabel class="col-sm-2 col-md-2  control-label"
+							value="Giảm giá:" />
+						<div class="col-sm-4 col-md-4">
+							<p:selectOneMenu styleClass="form-control" value="#{entity.sale}">
+								<f:selectItem></f:selectItem>
+								<f:selectItem itemLabel="Đang giảm giá" itemValue="1"></f:selectItem>
+								<f:selectItem itemLabel="Ngừng giảmg giá" itemValue="0"></f:selectItem>
+							</p:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<p:outputLabel class="col-sm-2 col-md-2  control-label"
+							value="Trạng thái : " />
+						<div class="col-sm-4 col-md-4">
+							<p:selectOneMenu styleClass="form-control"
+								value="#{entity.status}">
+								<f:selectItem></f:selectItem>
+								<f:selectItem itemLabel="Còn hàng" itemValue="1"></f:selectItem>
+								<f:selectItem itemLabel="Hết hàng" itemValue="0"></f:selectItem>
+							</p:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="EmptyBox5" />
+
+					<div class="form-horizontal" style="text-align: center">
+						<div class="text-bottom">
+							<p:commandButton value="#{msg['common.button.label.search']}"
+								icon="ui-icon-search" id="btnTimkiem"
+								actionListener="#{controller.onSearch()}"
+								update="frmTBLNhanVien:tblNhanVien">
+							</p:commandButton>
+							<p:commandButton value="#{msg['common.button.label.reset']}"
+								icon="fa fa-refresh" id="reset"
+								actionListener="#{controller.resetDialogForm()}"
+								update="frmSearch">
+							</p:commandButton>
+						</div>
+					</div>
+
+					<div class="EmptyBox5" />
+
+				</p:outputPanel>
+			</p:panel>
+			<p:panel id="toggleable" header="Danh mục sách" styleClass="card"
+				toggleable="true">
+				<p:outputPanel>
+					<div class="form-horizontal" style="text-align: center">
+						<div class="text-center">
+
+							<p:commandButton id="btnAdd"
+								value="#{msg['common.button.label.add']}" icon="fa fa-plus"
+								actionListener="#{controller.prepareInsert()}"
+								oncomplete="PF('dlgAddAcc').show();" update="dlgAddAcc">
+							</p:commandButton>
+
+						</div>
+					</div>
+					<br />
+					<p:dataTable id="tblNhanVien" paginator="true" rows="10"
+						value="#{controller.list}" var="item" paginatorPosition="bottom"
+						rowsPerPageTemplate="5,10,20"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						emptyMessage="#{msg['datatable.label.notfound']}">
+
+						<f:facet name="header">
+							<p:outputPanel style="text-align: left;">
+								<h:outputText
+									value="Tổng số sách : #{controller.list.size()}"></h:outputText>
+							</p:outputPanel>
+						</f:facet>
+
+						<p:column headerText="Tên sách">
+							<h:outputText value="#{item.name}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Tên danh mục">
+							<h:outputText value="#{danhmucUtils.loadTenDM(item.catId)}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Nhà xuất bản">
+							<h:outputText value="#{danhmucUtils.loadTenProducer(item.idProducer)}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Số lượng">
+							<h:outputText value="#{item.number}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="Giá">
+							<h:outputText value="#{item.price}">
+								<f:convertNumber pattern="#000.000" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Tình trạng giảm giá">
+							<h:outputText rendered="#{item.sale == 1}" value="Đang giảm giá" />
+							<h:outputText rendered="#{item.sale == 0}" value="Ngừng giảm giá" />
+						</p:column>
+
+						<p:column headerText="Trạng thái">
+							<h:outputText rendered="#{item.status == 1}" value="Còn hàng" />
+							<h:outputText rendered="#{item.status == 0}" value="Hết hàng" />
+						</p:column>
+						
+						<p:column headerText="Ảnh đại diện">
+							<img
+								style="visibility: #{item.getImage()== null? 'hidden': 'visible'};"
+								width="60px" height="60px"
+								src="data:image/png;base64, #{item.getImage() == null ? null :  controller.getProductImage(item.getImage())}">
+							</img>
+						</p:column>
+
+						<p:column width="164" style="text-align:center"
+							headerText="#{msg['common.table.col-header.action']}">
+
+							<p:commandButton id="update"
+								value="#{msg['common.dialog.header.prefixUpdate']}"
+								icon="fa fa-fw fa-edit"
+								actionListener="#{controller.onUpdate(item.id)}" 
+								oncomplete="PF('dlgAddAcc').show()"
+								update="dlgAddAcc:dlgAddAcc">
+							</p:commandButton>
+
+							<p:commandButton id="delete"
+								value="#{msg['common.button.label.delete']}"
+								icon="fa fa-fw fa-remove"
+								actionListener="#{controller.onDelete(item)}"
+								update="frmTBLNhanVien:tblNhanVien">
+								<p:confirm header="Xóa bản ghi"
+									message="#{msg['common.confirmDialog.message']}"
+									icon="ui-icon-alert">
+								</p:confirm>
+							</p:commandButton>
+
+							<p:confirmDialog global="true" widgetVar="confirmdlg"
+								showEffect="bounce" hideEffect="fade">
+								<p:commandButton value="#{msg['common.confirmDialog.yes']}"
+									styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+									update="frmTBLNhanVien">
+								</p:commandButton>
+
+								<p:commandButton value="#{msg['common.confirmDialog.no']}"
+									styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+									onclick="PF('confirmdlg').hide();" type="button">
+								</p:commandButton>
+							</p:confirmDialog>
+						</p:column>
+
+					</p:dataTable>
+				</p:outputPanel>
+			</p:panel>
+			<br />
+			<br />
+		</h:form>
+		<ui:include src="/admin/qlSanPham/add-san-pham-dialog.xhtml"></ui:include>
+	</ui:define>
+</ui:composition>
